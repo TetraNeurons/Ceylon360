@@ -43,8 +43,7 @@ export interface Stats {
   totalGuides: number;
   totalAdmins: number;
 }
-// Event
- Ticketing Types
+// Event Ticketing Types
 export interface EventPayment {
   id: string;
   eventId: string;

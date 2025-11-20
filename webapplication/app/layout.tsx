@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AccessibilityWidget } from "@/components/accessibility/AccessibilityWidget";
 
 export const metadata: Metadata = {
   title: "Heritage Lanka - Connect with Local Guides in Sri Lanka",
@@ -65,6 +66,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <AccessibilityWidget />
       </body>
     </html>
   );

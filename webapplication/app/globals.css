@@ -126,3 +126,53 @@
 .leaflet-control {
   z-index: 1 !important;
 }
+
+[data-screen-reader="true"] * {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+[data-screen-reader="true"] *:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+[data-screen-reader="true"] a,
+[data-screen-reader="true"] button,
+[data-screen-reader="true"] input,
+[data-screen-reader="true"] select,
+[data-screen-reader="true"] textarea {
+  position: relative;
+}
+
+[data-screen-reader="true"] a::after,
+[data-screen-reader="true"] button::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* High contrast mode for better readability */
+[data-screen-reader="true"] {
+  font-weight: 500;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  text-decoration: none;
+}
+
+.skip-to-main:focus {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1rem;
+}
