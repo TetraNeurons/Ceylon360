@@ -31,10 +31,10 @@ export async function GET(request: NextRequest) {
 
     // Get query parameters for filtering
     const searchParams = request.nextUrl.searchParams;
-    const timeRange = searchParams.get('timeRange') || '24h'; // 24h, 7d, 30d, all
+    const timeRange = searchParams.get('timeRange') || 'all'; // 24h, 7d, 30d, all
 
     // Calculate date filter
-    let dateFilter;
+    let dateFilter: Date | undefined;
     const now = new Date();
     if (timeRange === '24h') {
       dateFilter = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -44,30 +44,30 @@ export async function GET(request: NextRequest) {
       dateFilter = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
-    // Build where clause
-    const whereClause = dateFilter ? gte(apiUsageLogs.createdAt, dateFilter) : undefined;
+    // Build base query conditions
+    const baseCondition = dateFilter ? gte(apiUsageLogs.createdAt, dateFilter) : sql`1=1`;
 
-    // Get total stats
+    // Get total stats - using simpler aggregation
     const totalStats = await db
       .select({
-        totalRequests: sql<number>`count(*)::int`,
-        successfulRequests: sql<number>`count(*) filter (where ${apiUsageLogs.success} = true)::int`,
-        failedRequests: sql<number>`count(*) filter (where ${apiUsageLogs.success} = false)::int`,
-        totalCredits: sql<number>`sum(${apiUsageLogs.creditsUsed})::int`,
-        avgResponseTime: sql<number>`avg(${apiUsageLogs.responseTime})::int`,
+        totalRequests: sql<number>`cast(count(*) as integer)`,
+        successfulRequests: sql<number>`cast(sum(case when success = true then 1 else 0 end) as integer)`,
+        failedRequests: sql<number>`cast(sum(case when success = false then 1 else 0 end) as integer)`,
+        totalCredits: sql<number>`cast(coalesce(sum(credits_used), 0) as integer)`,
+        avgResponseTime: sql<number>`cast(coalesce(avg(response_time), 0) as integer)`,
       })
       .from(apiUsageLogs)
-      .where(whereClause);
+      .where(baseCondition);
 
     // Get requests by category
     const categoryStats = await db
       .select({
         category: apiUsageLogs.category,
-        count: sql<number>`count(*)::int`,
-        credits: sql<number>`sum(${apiUsageLogs.creditsUsed})::int`,
+        count: sql<number>`cast(count(*) as integer)`,
+        credits: sql<number>`cast(coalesce(sum(credits_used), 0) as integer)`,
       })
       .from(apiUsageLogs)
-      .where(whereClause)
+      .where(baseCondition)
       .groupBy(apiUsageLogs.category)
       .orderBy(desc(sql`count(*)`));
 
@@ -77,17 +77,21 @@ export async function GET(request: NextRequest) {
         userId: apiUsageLogs.userId,
         userName: users.name,
         userEmail: users.email,
-        requestCount: sql<number>`count(*)::int`,
-        creditsUsed: sql<number>`sum(${apiUsageLogs.creditsUsed})::int`,
+        requestCount: sql<number>`cast(count(*) as integer)`,
+        creditsUsed: sql<number>`cast(coalesce(sum(credits_used), 0) as integer)`,
       })
       .from(apiUsageLogs)
       .innerJoin(users, eq(apiUsageLogs.userId, users.id))
-      .where(whereClause)
+      .where(baseCondition)
       .groupBy(apiUsageLogs.userId, users.name, users.email)
       .orderBy(desc(sql`count(*)`))
       .limit(10);
 
     // Get recent errors
+    const errorCondition = dateFilter
+      ? and(eq(apiUsageLogs.success, false), gte(apiUsageLogs.createdAt, dateFilter))
+      : eq(apiUsageLogs.success, false);
+
     const recentErrors = await db
       .select({
         id: apiUsageLogs.id,
@@ -98,17 +102,13 @@ export async function GET(request: NextRequest) {
       })
       .from(apiUsageLogs)
       .innerJoin(users, eq(apiUsageLogs.userId, users.id))
-      .where(
-        dateFilter
-          ? and(eq(apiUsageLogs.success, false), gte(apiUsageLogs.createdAt, dateFilter))
-          : eq(apiUsageLogs.success, false)
-      )
+      .where(errorCondition)
       .orderBy(desc(apiUsageLogs.createdAt))
       .limit(10);
 
     // Calculate error rate
     const errorRate =
-      totalStats[0].totalRequests > 0
+      totalStats[0]?.totalRequests > 0
         ? ((totalStats[0].failedRequests / totalStats[0].totalRequests) * 100).toFixed(2)
         : '0.00';
 
@@ -116,16 +116,16 @@ export async function GET(request: NextRequest) {
       {
         success: true,
         stats: {
-          totalRequests: totalStats[0].totalRequests || 0,
-          successfulRequests: totalStats[0].successfulRequests || 0,
-          failedRequests: totalStats[0].failedRequests || 0,
-          totalCredits: totalStats[0].totalCredits || 0,
-          avgResponseTime: totalStats[0].avgResponseTime || 0,
+          totalRequests: totalStats[0]?.totalRequests || 0,
+          successfulRequests: totalStats[0]?.successfulRequests || 0,
+          failedRequests: totalStats[0]?.failedRequests || 0,
+          totalCredits: totalStats[0]?.totalCredits || 0,
+          avgResponseTime: totalStats[0]?.avgResponseTime || 0,
           errorRate: parseFloat(errorRate),
         },
-        categoryBreakdown: categoryStats,
-        topUsers,
-        recentErrors,
+        categoryBreakdown: categoryStats || [],
+        topUsers: topUsers || [],
+        recentErrors: recentErrors || [],
         timeRange,
       },
       { status: 200 }
