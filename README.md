@@ -99,6 +99,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - [ ] Firebase Storage setup 
 - [ ] Configure Stripe webhook endpoint
 - [ ] Setup website hosting and deployment
-- [ ] Setup WhatsApp bot hosting
+- [ ] Devlop WhatsApp bot 
+- [ ] Devlop MCP Server
+- [ ] host both Whatsapp bot and MCP Server
 - [ ] Test entire application end-to-end
 - [ ] Test and fix UI/UX issues
