@@ -64,8 +64,64 @@ export function AccessibilityWidget() {
     
     if (screenReaderEnabled) {
       document.body.setAttribute('data-screen-reader', 'true');
+      
+      // Initialize speech synthesis
+      const handleClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        let textToSpeak = '';
+        
+        // Get text content based on element type
+        if (target.tagName === 'BUTTON') {
+          textToSpeak = target.getAttribute('aria-label') || target.textContent || 'Button';
+        } else if (target.tagName === 'A') {
+          textToSpeak = target.getAttribute('aria-label') || target.textContent || 'Link';
+        } else if (target.tagName === 'INPUT') {
+          const input = target as HTMLInputElement;
+          const label = document.querySelector(`label[for="${input.id}"]`)?.textContent || 
+                       input.getAttribute('aria-label') || 
+                       input.placeholder || 
+                       input.type;
+          textToSpeak = `${label}, ${input.checked ? 'checked' : input.value || 'empty'}`;
+        } else if (target.tagName === 'SELECT') {
+          const select = target as HTMLSelectElement;
+          const label = document.querySelector(`label[for="${select.id}"]`)?.textContent || 
+                       select.getAttribute('aria-label');
+          textToSpeak = `${label || 'Select'}, ${select.options[select.selectedIndex]?.text || 'no selection'}`;
+        } else if (target.closest('button, a, [role="button"], [role="link"]')) {
+          const clickable = target.closest('button, a, [role="button"], [role="link"]') as HTMLElement;
+          textToSpeak = clickable.getAttribute('aria-label') || clickable.textContent || 'Interactive element';
+        } else if (target.textContent && target.textContent.trim()) {
+          textToSpeak = target.textContent.trim();
+        }
+        
+        if (textToSpeak) {
+          // Cancel any ongoing speech
+          window.speechSynthesis.cancel();
+          
+          // Create and speak the utterance
+          const utterance = new SpeechSynthesisUtterance(textToSpeak);
+          utterance.rate = 1.0;
+          utterance.pitch = 1.0;
+          utterance.volume = 1.0;
+          window.speechSynthesis.speak(utterance);
+        }
+      };
+      
+      // Add click listener to document
+      document.addEventListener('click', handleClick, true);
+      
+      // Announce that screen reader is enabled
+      const announcement = new SpeechSynthesisUtterance('Screen reader mode enabled');
+      window.speechSynthesis.speak(announcement);
+      
+      // Cleanup function
+      return () => {
+        document.removeEventListener('click', handleClick, true);
+        window.speechSynthesis.cancel();
+      };
     } else {
       document.body.removeAttribute('data-screen-reader');
+      window.speechSynthesis.cancel();
     }
   }, [screenReaderEnabled]);
 
