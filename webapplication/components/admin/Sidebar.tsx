@@ -29,11 +29,11 @@ import { useState } from "react";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/admin/dashboard" },
-  { icon: Users, label: "Users", href: "/admin/users" },
-  { icon: Plane, label: "Trips Overview", href: "/admin/trips" },
-  { icon: Receipt, label: "Payment History", href: "/admin/payments" },
+  { icon: Users, label: "User Management", href: "/admin/users" },
+  { icon: Plane, label: "Trip Management", href: "/admin/trips" },
   { icon: TicketPercent, label: "Events & Offers", href: "/admin/events" },
   { icon: Megaphone, label: "Advertisements", href: "/admin/advertisements" },
+  { icon: Receipt, label: "Payments", href: "/admin/payments" },
   { icon: Brain, label: "AI Analytics", href: "/admin/ai-analytics" },
 ];
 

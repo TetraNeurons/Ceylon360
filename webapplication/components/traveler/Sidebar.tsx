@@ -42,12 +42,12 @@ import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
-  { icon: Plane, label: "Planner", href: "/traveler/plan" },
-  { icon: PlaneLanding, label: "Your Plans", href: "/traveler/plans" },
-  { icon: Map, label: "Places", href: "/traveler/places" },
+  { icon: Plane, label: "Plan Trip", href: "/traveler/plan" },
+  { icon: PlaneLanding, label: "My Trips", href: "/traveler/plans" },
+  { icon: Map, label: "Explore Places", href: "/traveler/places" },
   { icon: TicketPercent, label: "Events & Offers", href: "/traveler/events" },
+  { icon: Star, label: "My Reviews", href: "/traveler/reviews" },
   { icon: History, label: "Payment History", href: "/traveler/history" },
-  { icon: Star, label: "Reviews", href: "/traveler/reviews" },
 ];
 
 export function AppSidebar() {

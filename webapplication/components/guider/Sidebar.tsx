@@ -25,8 +25,8 @@ import { useState } from "react";
 
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/guider/dashboard" },
-  { icon: PlaneTakeoff, label: "Jobs", href: "/guider/jobs" },
-  { icon: Star, label: "Reviews", href: "/guider/reviews" },
+  { icon: PlaneTakeoff, label: "Available Jobs", href: "/guider/jobs" },
+  { icon: Star, label: "My Reviews", href: "/guider/reviews" },
 ];
 
 export function AppSidebar() {
