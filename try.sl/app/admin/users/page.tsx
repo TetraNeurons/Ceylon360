@@ -4,28 +4,7 @@ import { useState, useEffect } from 'react';
 import { Trash2, Users, UserCheck, MapPin, Mail, Phone, BarChart3 } from 'lucide-react';
 import { AppSidebar } from '@/components/admin/Sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
-
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b'];
-
-interface TravelerData { country: string; }
-interface GuideData { rating: number; totalReviews: number; }
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: 'TRAVELER' | 'GUIDE' | 'ADMIN';
-  gender?: string;
-  travelerData?: TravelerData;
-  guideData?: GuideData;
-  createdAt: string;
-}
-interface Stats {
-  totalUsers: number;
-  totalTravelers: number;
-  totalGuides: number;
-  totalAdmins: number;
-}
+import { User,Stats } from '@/lib/types';
 
 export default function UsersManagementPage() {
   const [users, setUsers] = useState<User[]>([]);

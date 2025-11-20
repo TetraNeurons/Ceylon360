@@ -13,7 +13,7 @@ import {
 import {
   Home,
   Plane,
-  MessageSquare,
+  Map,
   History,
   Globe,
   LogOut,
@@ -41,6 +41,7 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
   { icon: Plane, label: "Planner", href: "/traveler/plan" },
+  { icon: Map, label: "Places", href: "/traveler/places" },
   { icon: TicketPercent, label: "Events & Offers", href: "/traveler/events" }, // NEW
   { icon: History, label: "History", href: "/traveler/History" },
 ];
