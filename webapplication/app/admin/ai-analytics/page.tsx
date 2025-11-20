@@ -112,7 +112,9 @@ export default function AIAnalyticsPage() {
   };
 
   const getHealthStatus = () => {
-    if (!stats) return { status: "unknown", color: "gray", label: "Unknown" };
+    if (!stats || stats.totalRequests === 0) {
+      return { status: "unknown", color: "gray", label: "No Data" };
+    }
     
     if (stats.successRate >= 95) {
       return { status: "healthy", color: "green", label: "Healthy" };
@@ -180,7 +182,7 @@ export default function AIAnalyticsPage() {
             </div>
 
             {/* Health Status Card */}
-            {stats && (
+            {stats && stats.totalRequests > 0 && (
               <Card className={`mb-6 border-${health.color}-200 bg-${health.color}-50`}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
@@ -207,7 +209,7 @@ export default function AIAnalyticsPage() {
             )}
 
             {/* Key Metrics */}
-            {stats && (
+            {stats && stats.totalRequests > 0 && (
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
                 <Card>
                   <CardContent className="p-4">

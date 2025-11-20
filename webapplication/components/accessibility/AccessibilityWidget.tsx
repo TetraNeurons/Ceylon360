@@ -18,6 +18,7 @@ export function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [hasDragged, setHasDragged] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [fontSize, setFontSize] = useState(100);
   const [colorBlindMode, setColorBlindMode] = useState<ColorBlindMode>('normal');
@@ -69,18 +70,25 @@ export function AccessibilityWidget() {
   }, [screenReaderEnabled]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest('.drag-handle')) {
-      setIsDragging(true);
-      setDragOffset({
-        x: e.clientX - position.x,
-        y: e.clientY - position.y,
-      });
+    setIsDragging(true);
+    setHasDragged(false);
+    setDragOffset({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+  };
+
+  const handleClick = () => {
+    // Only open if we didn't drag
+    if (!hasDragged) {
+      setIsOpen(true);
     }
   };
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging) {
+        setHasDragged(true);
         setPosition({
           x: Math.max(0, Math.min(window.innerWidth - 300, e.clientX - dragOffset.x)),
           y: Math.max(0, Math.min(window.innerHeight - 100, e.clientY - dragOffset.y)),
@@ -139,24 +147,22 @@ export function AccessibilityWidget() {
       <div
         className="fixed z-50"
         style={{ left: `${position.x}px`, top: `${position.y}px` }}
-        onMouseDown={handleMouseDown}
       >
         {!isOpen ? (
           <Button
-            onClick={() => setIsOpen(true)}
-            className="rounded-full w-14 h-14 shadow-lg"
+            onClick={handleClick}
+            onMouseDown={handleMouseDown}
+            className="rounded-full w-12 h-12 shadow-lg cursor-move relative"
             aria-label="Open accessibility options"
-            title="Accessibility Options"
+            title="Accessibility Options (Drag to move)"
           >
-            <Eye className="w-6 h-6" />
+            <GripVertical className="w-3 h-3 absolute top-1 left-1 opacity-40" />
+            <Eye className="w-5 h-5" />
           </Button>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-4 w-80 border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between mb-4 drag-handle cursor-move">
-              <div className="flex items-center gap-2">
-                <GripVertical className="w-5 h-5 text-gray-400" />
-                <h3 className="font-semibold text-lg">Accessibility</h3>
-              </div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg">Accessibility</h3>
               <Button
                 variant="ghost"
                 size="sm"
