@@ -19,7 +19,8 @@ import {
   TicketPercent,
   Plane,
   Receipt,
-  Megaphone
+  Megaphone,
+  Brain
 } from "lucide-react";
 
 import axios from "axios";
@@ -33,6 +34,7 @@ const menuItems = [
   { icon: Receipt, label: "Payment History", href: "/admin/payments" },
   { icon: TicketPercent, label: "Events & Offers", href: "/admin/events" },
   { icon: Megaphone, label: "Advertisements", href: "/admin/advertisements" },
+  { icon: Brain, label: "AI Analytics", href: "/admin/ai-analytics" },
 ];
 
 export function AppSidebar() {

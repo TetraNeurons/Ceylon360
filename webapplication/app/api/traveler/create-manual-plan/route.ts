@@ -4,6 +4,8 @@ import { db } from '@/db/drizzle';
 import { trips, tripLocations, travelers } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { getSession } from '@/lib/jwt';
+import { multiServiceRateLimiter } from '@/lib/rate-limiter';
+import { createAIUsageLogger } from '@/lib/ai-logger';
 
 export async function POST(request: NextRequest) {
     const session = await getSession();
@@ -11,6 +13,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    // Check Gemini AI rate limit
+    const rateLimitResult = multiServiceRateLimiter.check(session.userId, 'gemini');
+    if (!rateLimitResult.allowed) {
+      const resetDate = new Date(rateLimitResult.resetTime);
+      return NextResponse.json(
+        {
+          success: false,
+          error: `AI plan organization limit reached. Try again after ${resetDate.toLocaleTimeString()}`,
+          retryable: true,
+          resetTime: rateLimitResult.resetTime,
+          remaining: 0,
+        },
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
+          }
+        }
       );
     }
   try {
@@ -94,7 +119,7 @@ export async function POST(request: NextRequest) {
       toDate,
       totalDays,
       preferences: preferences || [],
-    });
+    }, session.userId);
 
     // Create trip
     const [newTrip] = await db
@@ -163,7 +188,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper function to organize manual plan with AI
-async function organizeManualPlanWithAI(params: any) {
+async function organizeManualPlanWithAI(params: any, userId: string) {
   const { locations, fromDate, toDate, totalDays, preferences } = params;
 
   try {
@@ -231,6 +256,9 @@ ${preferences.length > 0 ? `- Preferences: ${preferences.join(', ')}` : ''}
 Return ONLY the JSON object.
 `;
 
+    // Create AI usage logger
+    const logger = createAIUsageLogger(userId, 'CREATE_MANUAL_PLAN', prompt);
+
     const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
@@ -245,10 +273,27 @@ Return ONLY the JSON object.
     const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
     const planData = JSON.parse(cleanText);
 
+    // Log successful AI usage
+    await logger.complete({
+      success: true,
+      responseText: JSON.stringify(planData),
+    });
+
     return planData;
 
   } catch (error) {
     console.error('AI organization failed:', error);
+    
+    // Log failed AI usage
+    try {
+      const errorLogger = createAIUsageLogger(userId, 'CREATE_MANUAL_PLAN', 'Manual plan organization');
+      await errorLogger.complete({
+        success: false,
+        errorMessage: (error as any)?.message || 'Unknown error',
+      });
+    } catch (logError) {
+      console.error('Failed to log AI error:', logError);
+    }
     
     // Fallback: simple distribution
     const locationsPerDay = Math.ceil(locations.length / totalDays);

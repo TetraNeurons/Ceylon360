@@ -29,7 +29,14 @@ import {
   AlertTriangle,
   Megaphone,
   Eye,
+  Brain,
 } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Trip {
   id: string;
@@ -100,11 +107,14 @@ export default function AdminDashboardPage() {
   const [apiLoading, setApiLoading] = useState(true);
   const [adAnalytics, setAdAnalytics] = useState<AdAnalytics | null>(null);
   const [adLoading, setAdLoading] = useState(true);
+  const [aiStats, setAiStats] = useState<{ totalRequests: number; successRate: number; totalTokens: number } | null>(null);
+  const [aiLoading, setAiLoading] = useState(true);
 
   useEffect(() => {
     fetchTrips();
     fetchAPIUsage();
     fetchAdAnalytics();
+    fetchAIStats();
   }, [filter, timeRange]);
 
   const fetchTrips = async () => {
@@ -174,6 +184,28 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchAIStats = async () => {
+    try {
+      setAiLoading(true);
+      const response = await fetch(`/api/admin/ai-analytics?timeRange=${timeRange}`);
+      const data = await response.json();
+
+      if (data.success) {
+        setAiStats({
+          totalRequests: data.stats.totalRequests,
+          successRate: data.stats.successRate,
+          totalTokens: data.stats.totalTokens,
+        });
+      } else {
+        console.error("Failed to fetch AI stats:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching AI stats:", error);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
@@ -233,14 +265,11 @@ export default function AdminDashboardPage() {
               <p className="text-gray-600 mt-1">Monitor guide assignments and trip statuses</p>
             </div>
 
-            {/* API Usage Monitoring Section */}
+            {/* API Health Overview with Accordions */}
             <Card className="mb-6">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-blue-600" />
-                    Nearby Places API Usage
-                  </CardTitle>
+                  <CardTitle>API Health Overview</CardTitle>
                   <Select value={timeRange} onValueChange={setTimeRange}>
                     <SelectTrigger className="w-[140px]">
                       <SelectValue />
@@ -255,6 +284,23 @@ export default function AdminDashboardPage() {
                 </div>
               </CardHeader>
               <CardContent>
+                <Accordion type="single" collapsible className="w-full">
+                  {/* Serper API Accordion */}
+                  <AccordionItem value="serper">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-3">
+                        <Activity className="h-5 w-5 text-blue-600" />
+                        <div>
+                          <div className="font-semibold">Serper API (Nearby Places)</div>
+                          {apiStats && (
+                            <div className="text-sm text-gray-500">
+                              {apiStats.totalRequests} requests • {apiStats.errorRate.toFixed(1)}% error rate
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
                 {apiLoading ? (
                   <div className="flex items-center justify-center py-8">
                     <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
@@ -363,12 +409,68 @@ export default function AdminDashboardPage() {
                         </div>
                       </div>
                     )}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    No API usage data available
-                  </div>
-                )}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        No API usage data available
+                      </div>
+                    )}
+                    </AccordionContent>
+                  </AccordionItem>
+
+                  {/* Gemini AI Accordion */}
+                  <AccordionItem value="gemini">
+                    <AccordionTrigger>
+                      <div className="flex items-center gap-3">
+                        <Brain className="h-5 w-5 text-purple-600" />
+                        <div>
+                          <div className="font-semibold">Gemini AI (Travel Planning)</div>
+                          {aiStats && (
+                            <div className="text-sm text-gray-500">
+                              {aiStats.totalRequests} requests • {aiStats.successRate.toFixed(1)}% success rate
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {aiLoading ? (
+                        <div className="flex items-center justify-center py-8">
+                          <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+                        </div>
+                      ) : aiStats ? (
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="bg-purple-50 p-4 rounded-lg">
+                              <div className="text-sm text-purple-600 mb-1">Total Requests</div>
+                              <div className="text-2xl font-bold text-purple-900">{aiStats.totalRequests}</div>
+                            </div>
+                            <div className="bg-green-50 p-4 rounded-lg">
+                              <div className="text-sm text-green-600 mb-1">Success Rate</div>
+                              <div className="text-2xl font-bold text-green-900">{aiStats.successRate.toFixed(1)}%</div>
+                            </div>
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                              <div className="text-sm text-blue-600 mb-1">Total Tokens</div>
+                              <div className="text-2xl font-bold text-blue-900">{aiStats.totalTokens}</div>
+                            </div>
+                          </div>
+                          <div className="pt-2">
+                            <a
+                              href="/admin/ai-analytics"
+                              className="text-sm text-purple-600 hover:text-purple-800 font-medium"
+                            >
+                              View detailed AI analytics →
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          No AI usage data available
+                        </div>
+                      )}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
               </CardContent>
             </Card>
 

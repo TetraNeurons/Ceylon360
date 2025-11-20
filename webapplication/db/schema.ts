@@ -11,6 +11,7 @@ export const paymentStatusEnum = pgEnum('payment_status', ['PENDING', 'PAID', 'R
 export const planningModeEnum = pgEnum('planning_mode', ['MANUAL', 'AI_GENERATED']);
 export const tripStatusEnum = pgEnum('trip_status', ['PLANNING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']);
 export const adStatusEnum = pgEnum('ad_status', ['PENDING', 'ACTIVE', 'INACTIVE', 'REJECTED']);
+export const workflowTypeEnum = pgEnum('workflow_type', ['GENERATE_AI_PLAN', 'CREATE_MANUAL_PLAN']);
 
 // Users table
 export const users = pgTable('users', {
@@ -204,6 +205,20 @@ export const advertisements = pgTable('advertisements', {
   approvedBy: text('approved_by').references(() => users.id, { onDelete: 'set null' }),
 });
 
+// AI Usage Logs table - Tracks Gemini AI usage for monitoring
+export const aiUsageLogs = pgTable('ai_usage_logs', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  workflowType: workflowTypeEnum('workflow_type').notNull(),
+  promptText: text('prompt_text').notNull(),
+  responseText: text('response_text'),
+  tokensUsed: integer('tokens_used'),
+  success: boolean('success').notNull(),
+  errorMessage: text('error_message'),
+  responseTime: integer('response_time'), // in milliseconds
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   traveler: one(travelers, {
@@ -309,6 +324,13 @@ export const apiUsageLogsRelations = relations(apiUsageLogs, ({ one }) => ({
 export const advertisementsRelations = relations(advertisements, ({ one }) => ({
   approver: one(users, {
     fields: [advertisements.approvedBy],
+    references: [users.id],
+  }),
+}));
+
+export const aiUsageLogsRelations = relations(aiUsageLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [aiUsageLogs.userId],
     references: [users.id],
   }),
 }));

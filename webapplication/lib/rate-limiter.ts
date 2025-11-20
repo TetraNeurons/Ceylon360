@@ -55,5 +55,41 @@ class RateLimiter {
   }
 }
 
-// Export singleton instance
-export const rateLimiter = new RateLimiter(100, 60 * 60 * 1000); // 100 requests per hour
+// Multi-service rate limiter
+interface ServiceConfig {
+  maxRequests: number;
+  windowMs: number;
+}
+
+class MultiServiceRateLimiter {
+  private services: Map<string, RateLimiter> = new Map();
+
+  constructor(configs: Record<string, ServiceConfig>) {
+    for (const [service, config] of Object.entries(configs)) {
+      this.services.set(service, new RateLimiter(config.maxRequests, config.windowMs));
+    }
+  }
+
+  check(userId: string, service: string): { allowed: boolean; remaining: number; resetTime: number } {
+    const limiter = this.services.get(service);
+    if (!limiter) {
+      throw new Error(`Unknown service: ${service}`);
+    }
+    return limiter.check(userId);
+  }
+
+  reset(userId: string, service: string): void {
+    const limiter = this.services.get(service);
+    if (limiter) {
+      limiter.reset(userId);
+    }
+  }
+}
+
+// Export singleton instances
+export const rateLimiter = new RateLimiter(100, 60 * 60 * 1000); // 100 requests per hour (legacy)
+
+export const multiServiceRateLimiter = new MultiServiceRateLimiter({
+  serper: { maxRequests: 10, windowMs: 60 * 60 * 1000 },  // 10 requests per hour per user
+  gemini: { maxRequests: 5, windowMs: 60 * 60 * 1000 }     // 5 requests per hour per user
+});

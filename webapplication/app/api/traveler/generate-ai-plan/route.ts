@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { getSession } from '@/lib/jwt';
+import { multiServiceRateLimiter } from '@/lib/rate-limiter';
+import { createAIUsageLogger } from '@/lib/ai-logger';
 
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY || ''
@@ -15,6 +17,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    // Check Gemini AI rate limit
+    const rateLimitResult = multiServiceRateLimiter.check(session.userId, 'gemini');
+    if (!rateLimitResult.allowed) {
+      const resetDate = new Date(rateLimitResult.resetTime);
+      return NextResponse.json(
+        {
+          success: false,
+          error: `AI plan generation limit reached. Try again after ${resetDate.toLocaleTimeString()}`,
+          retryable: true,
+          resetTime: rateLimitResult.resetTime,
+          remaining: 0,
+        },
+        { 
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '5',
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': rateLimitResult.resetTime.toString(),
+          }
+        }
       );
     }
 
@@ -131,6 +156,10 @@ Rules:
 - If coordinates are missing in input, use correct real-world coordinates for that place
 - Never omit lat/lng fields
 `;
+
+    // Create AI usage logger
+    const logger = createAIUsageLogger(session.userId, 'GENERATE_AI_PLAN', prompt);
+
     // Gemini request with retry logic
     let response;
     let attempts = 0;
@@ -181,6 +210,13 @@ Rules:
         planData.totalDays = totalDays;
         planData.generatedAt = new Date().toISOString();
 
+        // Log successful AI usage
+        await logger.complete({
+          success: true,
+          responseText: JSON.stringify(planData),
+          tokensUsed: undefined, // Gemini doesn't provide token count in response
+        });
+
         return NextResponse.json({
           success: true,
           plan: planData
@@ -192,6 +228,14 @@ Rules:
 
         if (attempts >= maxAttempts) {
           console.error('All attempts failed. Last response:', response?.text);
+          
+          // Log failed AI usage
+          await logger.complete({
+            success: false,
+            errorMessage: `Failed after ${maxAttempts} attempts: ${(parseError as any)?.message}`,
+            responseText: response?.text,
+          });
+
           return NextResponse.json(
             {
               success: false,
@@ -218,6 +262,20 @@ Rules:
 
   } catch (error) {
     console.error('Generate plan error:', error);
+
+    // Log error if we have session
+    const session = await getSession();
+    if (session?.userId) {
+      try {
+        const errorLogger = createAIUsageLogger(session.userId, 'GENERATE_AI_PLAN', 'Error before prompt creation');
+        await errorLogger.complete({
+          success: false,
+          errorMessage: (error as any)?.message || 'Unknown error',
+        });
+      } catch (logError) {
+        console.error('Failed to log error:', logError);
+      }
+    }
 
     return NextResponse.json(
       {
