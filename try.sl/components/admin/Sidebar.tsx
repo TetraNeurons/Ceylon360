@@ -26,7 +26,7 @@ import { useState } from "react";
 
 
 const menuItems = [
-  { icon: Home, label: "Dashboard", href: "/dashboard" },
+  { icon: Home, label: "Dashboard", href: "/admin/dashboard" },
   { icon: Users, label: "Users", href: "/admin/users" },
   { icon: Plane, label: "Trips Overview", href: "/admin/trips" },
   { icon: Receipt, label: "Payment History", href: "/admin/payments" },

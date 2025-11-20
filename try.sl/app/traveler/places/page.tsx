@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
+import { NearbyPlacesButton } from "@/components/NearbyPlacesButton";
 
 import {
   Select,
@@ -567,6 +568,14 @@ export default function PlacesPage() {
                               Visit Website
                             </Button>
                           )}
+
+                          <NearbyPlacesButton
+                            locationName={place.title}
+                            latitude={place.latitude}
+                            longitude={place.longitude}
+                            variant="outline"
+                            size="default"
+                          />
                         </div>
                       </div>
 

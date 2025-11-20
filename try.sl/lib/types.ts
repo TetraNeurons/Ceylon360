@@ -158,3 +158,45 @@ export interface EventPaymentDetails extends Payment {
 }
 
 export type PaymentDetails = TripPaymentDetails | EventPaymentDetails;
+
+// Nearby Places Types
+export interface PlaceResult {
+  id: string;
+  position: number;
+  title: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  rating?: number;
+  ratingCount?: number;
+  category: string;
+  phoneNumber?: string;
+  website?: string;
+  priceLevel?: string;
+}
+
+export interface NearbyPlacesState {
+  queryLocation: {
+    name: string;
+    lat: number;
+    lng: number;
+  };
+  selectedCategory: 'hotels' | 'food' | 'entertainment' | 'hospitals' | null;
+  results: PlaceResult[];
+  loading: boolean;
+  error: string | null;
+  sortBy: 'default' | 'rating' | 'reviews';
+}
+
+export interface APILog {
+  id: string;
+  timestamp: Date;
+  query: string;
+  category: string;
+  locationName: string;
+  resultCount: number;
+  creditsUsed: number;
+  userId: string;
+  success: boolean;
+  errorMessage?: string;
+}

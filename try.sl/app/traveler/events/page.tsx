@@ -33,6 +33,7 @@ import {
   MapIcon
 } from "lucide-react";
 import { EventItem } from "@/lib/types";
+import { NearbyPlacesButton } from "@/components/NearbyPlacesButton";
 
 
 export default function EventsPage() {
@@ -346,6 +347,16 @@ export default function EventsPage() {
                             <Phone className="w-4 h-4 mr-2" />
                             Call Organizer
                           </Button>
+
+                          {event.lat && event.lng && (
+                            <NearbyPlacesButton
+                              locationName={event.place}
+                              latitude={event.lat}
+                              longitude={event.lng}
+                              variant="outline"
+                              size="default"
+                            />
+                          )}
                         </div>
                       </div>
 

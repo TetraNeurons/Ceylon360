@@ -173,6 +173,21 @@ export const guideDeclinations = pgTable('guide_declinations', {
   declinedAt: timestamp('declined_at').defaultNow().notNull(),
 });
 
+// API Usage Logs table - Tracks Serper API usage for monitoring
+export const apiUsageLogs = pgTable('api_usage_logs', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  query: text('query').notNull(),
+  category: text('category').notNull(),
+  locationName: text('location_name').notNull(),
+  resultCount: integer('result_count').notNull(),
+  creditsUsed: integer('credits_used').notNull(),
+  success: boolean('success').default(true).notNull(),
+  errorMessage: text('error_message'),
+  responseTime: integer('response_time'), // in milliseconds
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   traveler: one(travelers, {
@@ -265,5 +280,12 @@ export const guideDeclinationsRelations = relations(guideDeclinations, ({ one })
   trip: one(trips, {
     fields: [guideDeclinations.tripId],
     references: [trips.id],
+  }),
+}));
+
+export const apiUsageLogsRelations = relations(apiUsageLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [apiUsageLogs.userId],
+    references: [users.id],
   }),
 }));
