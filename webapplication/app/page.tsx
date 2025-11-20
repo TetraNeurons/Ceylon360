@@ -354,6 +354,15 @@ export default function Home() {
                   <Button type="submit" className="w-full" disabled={adSubmitting}>
                     {adSubmitting ? "Submitting..." : "Submit Advertisement"}
                   </Button>
+
+                  <div className="text-center pt-2">
+                    <p className="text-sm text-muted-foreground">
+                      Already submitted an ad?{" "}
+                      <Link href="/check-ad" className="text-primary hover:underline font-medium">
+                        Check your ad status
+                      </Link>
+                    </p>
+                  </div>
                 </form>
               </CardContent>
             </Card>
