@@ -28,7 +28,9 @@ import {
   Tag,
   Phone,
   ExternalLink,
-  Ticket
+  Ticket,
+  LayoutGrid,
+  MapIcon
 } from "lucide-react";
 import { EventItem } from "@/lib/types";
 
@@ -36,6 +38,7 @@ import { EventItem } from "@/lib/types";
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
   useEffect(() => {
     fetchEvents();
@@ -78,9 +81,102 @@ export default function EventsPage() {
         <AppSidebar />
 
         <div className="flex-1 overflow-y-auto p-8">
-          <h1 className="text-3xl font-bold text-black mb-8">Upcoming Events</h1>
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-black mb-4">Upcoming Events</h1>
+            
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-600">
+                {events.length} events available
+              </span>
+              
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-2 border rounded-lg p-1">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="gap-2"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                  Grid
+                </Button>
+                <Button
+                  variant={viewMode === "map" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("map")}
+                  className="gap-2"
+                >
+                  <MapIcon className="w-4 h-4" />
+                  Map
+                </Button>
+              </div>
+            </div>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {/* Map View */}
+          {viewMode === "map" && (
+            <div className="w-full h-[calc(100vh-280px)] rounded-lg overflow-hidden border border-gray-200 relative">
+              {/* Map Container */}
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <MapIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-xl font-bold mb-2">Events Map View</h3>
+                  <p className="text-gray-600 mb-4">
+                    Showing {events.length} event locations
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Click on any event below to view its location on Google Maps
+                  </p>
+                </div>
+              </div>
+              
+              {/* Overlay with event list */}
+              <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm max-h-[calc(100%-2rem)] overflow-y-auto">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-lg">
+                    {events.length} Events
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {events.map((event, idx) => (
+                    <button
+                      key={event.id}
+                      onClick={() => {
+                        openGoogleMaps(event.lat, event.lng, event.place);
+                      }}
+                      className="w-full text-left p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm text-gray-500 mt-0.5 min-w-[24px]">
+                          {idx + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm line-clamp-1">
+                            {event.title}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <p className="text-xs text-gray-600 flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {event.date}
+                            </p>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            {event.place}
+                          </p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Grid View */}
+          {viewMode === "grid" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {events.length === 0 && (
               <div className="col-span-full flex items-center justify-center py-20">
                 <p className="text-gray-500 text-lg">No events available at the moment</p>
@@ -265,7 +361,8 @@ export default function EventsPage() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </SidebarProvider>

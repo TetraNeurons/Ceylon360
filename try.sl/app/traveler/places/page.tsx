@@ -30,7 +30,9 @@ import {
   Globe,
   Map,
   Filter,
-  Search
+  Search,
+  LayoutGrid,
+  MapIcon
 } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
@@ -83,6 +85,8 @@ export default function PlacesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [imageCache] = useState<Record<string, string>>({});
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
+  const [selectedPlace, setSelectedPlace] = useState<(Attraction & { district: string }) | null>(null);
 
   useEffect(() => {
     loadPlacesData();
@@ -270,6 +274,28 @@ export default function PlacesPage() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-2 border rounded-lg p-1">
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className="gap-2"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                  Grid
+                </Button>
+                <Button
+                  variant={viewMode === "map" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("map")}
+                  className="gap-2"
+                >
+                  <MapIcon className="w-4 h-4" />
+                  Map
+                </Button>
+              </div>
               
               <span className="text-sm text-gray-600">
                 {filteredAttractions.length} places found
@@ -277,7 +303,73 @@ export default function PlacesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-4 justify-items-center">
+          {/* Map View */}
+          {viewMode === "map" && (
+            <div className="w-full h-[calc(100vh-280px)] rounded-lg overflow-hidden border border-gray-200 relative">
+              {/* Map Container */}
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                <div className="text-center p-8">
+                  <MapIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                  <h3 className="text-xl font-bold mb-2">Map View</h3>
+                  <p className="text-gray-600 mb-4">
+                    Showing {displayedAttractions.length} locations
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    Click on any location below to view it on Google Maps
+                  </p>
+                </div>
+              </div>
+              
+              {/* Overlay with markers info */}
+              <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm max-h-[calc(100%-2rem)] overflow-y-auto">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-lg">
+                    {displayedAttractions.length} Locations
+                  </h3>
+                  <span className="text-xs text-gray-500">
+                    Page {Math.floor(displayCount / 100)}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {displayedAttractions.map((place, idx) => (
+                    <button
+                      key={place.cid}
+                      onClick={() => {
+                        setSelectedPlace(place);
+                        openGoogleMaps(place.latitude, place.longitude, place.title);
+                      }}
+                      className="w-full text-left p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
+                    >
+                      <div className="flex items-start gap-2">
+                        <span className="font-bold text-sm text-gray-500 mt-0.5 min-w-[24px]">
+                          {idx + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm line-clamp-1">
+                            {place.title}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <p className="text-xs text-gray-600 flex items-center gap-1">
+                              <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                              {place.rating}
+                            </p>
+                            <span className="text-xs text-gray-500">
+                              {place.district}
+                            </span>
+                          </div>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Grid View */}
+          {viewMode === "grid" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-4 justify-items-center">
             {displayedAttractions.length === 0 && (
               <div className="col-span-full flex items-center justify-center py-20">
                 <p className="text-gray-500 text-lg">No attractions found</p>
@@ -498,7 +590,8 @@ export default function PlacesPage() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
 
           {/* Load More Button */}
           {displayCount < sortedAttractions.length && (
