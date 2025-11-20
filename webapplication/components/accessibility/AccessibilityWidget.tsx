@@ -16,7 +16,7 @@ type ColorBlindMode = 'normal' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 
 
 export function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ x: 20, y: window.innerHeight - 200 });
+  const [position, setPosition] = useState({ x: 20, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [fontSize, setFontSize] = useState(100);
@@ -24,6 +24,9 @@ export function AccessibilityWidget() {
   const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
 
   useEffect(() => {
+    // Set initial position after mount
+    setPosition({ x: 20, y: window.innerHeight - 200 });
+    
     // Load saved preferences
     const savedFontSize = localStorage.getItem('a11y-font-size');
     const savedColorMode = localStorage.getItem('a11y-color-mode');

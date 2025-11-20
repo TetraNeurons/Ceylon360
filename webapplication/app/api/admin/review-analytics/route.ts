@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.isValid || !authResult.payload) {
+    if (!authResult.success || !authResult.user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is an admin
-    if (authResult.payload.role !== 'ADMIN') {
+    if (authResult.user.role !== 'ADMIN') {
       return NextResponse.json(
         { success: false, error: 'Only admins can access this endpoint' },
         { status: 403 }

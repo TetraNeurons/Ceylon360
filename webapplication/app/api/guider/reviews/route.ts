@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.isValid || !authResult.payload) {
+    if (!authResult.success || !authResult.user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -16,14 +16,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user is a guide
-    if (authResult.payload.role !== 'GUIDE') {
+    if (authResult.user.role !== 'GUIDE') {
       return NextResponse.json(
         { success: false, error: 'Only guides can access this endpoint' },
         { status: 403 }
       );
     }
 
-    const userId = authResult.payload.userId;
+    const userId = authResult.user.userId;
     const body = await request.json();
     const { tripId, revieweeId, rating, comment } = body;
 
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.isValid || !authResult.payload) {
+    if (!authResult.success || !authResult.user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -89,14 +89,14 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user is a guide
-    if (authResult.payload.role !== 'GUIDE') {
+    if (authResult.user.role !== 'GUIDE') {
       return NextResponse.json(
         { success: false, error: 'Only guides can access this endpoint' },
         { status: 403 }
       );
     }
 
-    const userId = authResult.payload.userId;
+    const userId = authResult.user.userId;
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type'); // 'given' or 'received'
 

@@ -8,12 +8,12 @@ import { recalculateGuideRating, recalculateTravelerRating } from '@/lib/rating-
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.isValid || !authResult.payload) {
+    if (!authResult.success || !authResult.user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -21,15 +21,15 @@ export async function PATCH(
     }
 
     // Check if user is a traveler or guide
-    if (authResult.payload.role !== 'TRAVELER' && authResult.payload.role !== 'GUIDE') {
+    if (authResult.user.role !== 'TRAVELER' && authResult.user.role !== 'GUIDE') {
       return NextResponse.json(
         { success: false, error: 'Only travelers and guides can edit reviews' },
         { status: 403 }
       );
     }
 
-    const userId = authResult.payload.userId;
-    const reviewId = params.id;
+    const userId = authResult.user.userId;
+    const { id: reviewId } = await params;
     const body = await request.json();
     const { rating, comment } = body;
 

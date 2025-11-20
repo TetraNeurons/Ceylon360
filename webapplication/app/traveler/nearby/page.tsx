@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AppSidebar } from '@/components/traveler/Sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -33,7 +33,7 @@ const CATEGORY_QUERIES = {
   hospitals: (placeName: string) => `hospitals near ${placeName}`,
 };
 
-export default function NearbyPlacesPage() {
+function NearbyPlacesContent() {
   const searchParams = useSearchParams();
   
   const [state, setState] = useState<NearbyPlacesState>({
@@ -356,5 +356,17 @@ export default function NearbyPlacesPage() {
         </div>
       </div>
     </SidebarProvider>
+  );
+}
+
+export default function NearbyPlacesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    }>
+      <NearbyPlacesContent />
+    </Suspense>
   );
 }

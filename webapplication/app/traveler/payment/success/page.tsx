@@ -1,14 +1,15 @@
 "use client";
 
+import { Suspense } from "react";
 import { AppSidebar } from "@/components/traveler/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tripId = searchParams.get("trip_id");
@@ -78,5 +79,17 @@ export default function PaymentSuccessPage() {
         </div>
       </div>
     </SidebarProvider>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    }>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

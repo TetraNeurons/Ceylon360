@@ -4,12 +4,12 @@ import { checkReviewEligibility } from '@/lib/review-eligibility';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     const authResult = await verifyAuth(request);
-    if (!authResult.isValid || !authResult.payload) {
+    if (!authResult.success || !authResult.user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -17,15 +17,15 @@ export async function GET(
     }
 
     // Check if user is a traveler
-    if (authResult.payload.role !== 'TRAVELER') {
+    if (authResult.user.role !== 'TRAVELER') {
       return NextResponse.json(
         { success: false, error: 'Only travelers can access this endpoint' },
         { status: 403 }
       );
     }
 
-    const userId = authResult.payload.userId;
-    const tripId = params.id;
+    const userId = authResult.user.userId;
+    const { id: tripId } = await params;
 
     // Check review eligibility
     const eligibility = await checkReviewEligibility(tripId, userId, 'TRAVELER');

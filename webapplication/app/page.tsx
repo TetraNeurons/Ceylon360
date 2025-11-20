@@ -69,9 +69,11 @@ export default function Home() {
   }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(paymentRef)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(paymentRef)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
   }
 
   return (
