@@ -34,6 +34,13 @@ import {
 } from "lucide-react";
 import { EventItem } from "@/lib/types";
 import { NearbyPlacesButton } from "@/components/NearbyPlacesButton";
+import dynamic from "next/dynamic";
+
+// Dynamically import map to avoid SSR issues
+const EventsMap = dynamic(
+  () => import("@/components/EventsMap").then((mod) => mod.EventsMap),
+  { ssr: false, loading: () => <div className="h-full w-full bg-gray-100 rounded-lg animate-pulse" /> }
+);
 
 
 export default function EventsPage() {
@@ -116,62 +123,8 @@ export default function EventsPage() {
 
           {/* Map View */}
           {viewMode === "map" && (
-            <div className="w-full h-[calc(100vh-280px)] rounded-lg overflow-hidden border border-gray-200 relative">
-              {/* Map Container */}
-              <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <MapIcon className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-                  <h3 className="text-xl font-bold mb-2">Events Map View</h3>
-                  <p className="text-gray-600 mb-4">
-                    Showing {events.length} event locations
-                  </p>
-                  <p className="text-sm text-gray-500 mb-4">
-                    Click on any event below to view its location on Google Maps
-                  </p>
-                </div>
-              </div>
-              
-              {/* Overlay with event list */}
-              <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-sm max-h-[calc(100%-2rem)] overflow-y-auto">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-bold text-lg">
-                    {events.length} Events
-                  </h3>
-                </div>
-                <div className="space-y-2">
-                  {events.map((event, idx) => (
-                    <button
-                      key={event.id}
-                      onClick={() => {
-                        openGoogleMaps(event.lat, event.lng, event.place);
-                      }}
-                      className="w-full text-left p-2 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200"
-                    >
-                      <div className="flex items-start gap-2">
-                        <span className="font-bold text-sm text-gray-500 mt-0.5 min-w-[24px]">
-                          {idx + 1}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium text-sm line-clamp-1">
-                            {event.title}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <p className="text-xs text-gray-600 flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              {event.date}
-                            </p>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                            <MapPin className="w-3 h-3" />
-                            {event.place}
-                          </p>
-                        </div>
-                        <ExternalLink className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+            <div className="w-full h-[calc(100vh-280px)]">
+              <EventsMap events={events} />
             </div>
           )}
 

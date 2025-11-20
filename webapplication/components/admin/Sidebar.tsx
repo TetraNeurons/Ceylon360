@@ -53,7 +53,7 @@ export function AppSidebar() {
           <Globe className="h-10 w-10 text-blue-600" />
           <div>
             <h2 className="text-xl font-bold">Heritage Lanka</h2>
-            <p className="text-sm text-muted-foreground">Sri Lanka</p>
+            <p className="text-sm text-muted-foreground">Admin</p>
           </div>
         </div>
       </SidebarHeader>
