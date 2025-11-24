@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
     // Insert trip locations with AI-organized day assignments
     const tripLocationData = aiOrganizedPlan.organizedLocations.map((loc: any) => ({
       tripId: newTrip.id,
-      title: loc.title,
+      title: loc.title || loc.name || 'Custom Location',
       address: loc.address || 'Manual location',
       district: loc.district || 'Custom',
       latitude: loc.latitude,
@@ -298,7 +298,7 @@ Return ONLY the JSON object.
     // Fallback: simple distribution
     const locationsPerDay = Math.ceil(locations.length / totalDays);
     const organizedLocations = locations.map((loc: any, idx: number) => ({
-      title: loc.name,
+      title: loc.title || loc.name || 'Custom Location',
       latitude: loc.lat,
       longitude: loc.lng,
       address: loc.address || 'Manual location',

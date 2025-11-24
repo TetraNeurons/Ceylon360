@@ -362,7 +362,7 @@ export default function Home() {
                   <div className="text-center pt-2">
                     <p className="text-sm text-muted-foreground">
                       Already submitted an ad?{" "}
-                      <Link href="/check-ad" className="text-primary hover:underline font-medium">
+                      <Link href="/public/check-ad" className="text-primary hover:underline font-medium">
                         Check your ad status
                       </Link>
                     </p>

@@ -669,8 +669,8 @@ export default function PlanMakerContent() {
 
         {/* AI Plan Preview Modal with Map */}
         {showPlanPreview && generatedPlan && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" style={{ zIndex: 9999 }}>
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col" style={{ zIndex: 10000 }}>
               <div className="p-4 lg:p-6 border-b flex justify-between items-center">
                 <h2 className="text-xl lg:text-2xl font-bold">Your AI-Generated Travel Plan</h2>
                 <Button variant="ghost" size="sm" onClick={handleRejectPlan}>
@@ -741,12 +741,13 @@ export default function PlanMakerContent() {
                 </div>
 
                 {/* Map */}
-                <div className="w-full lg:w-1/2 h-[400px] lg:h-full relative">
+                <div className="w-full lg:w-1/2 h-[400px] lg:h-full relative" style={{ zIndex: 1 }}>
                   {validLocations.length > 0 ? (
                     <MapContainer
                       center={[validLocations[0].lat, validLocations[0].lng]}
                       zoom={7}
                       className="h-full w-full"
+                      style={{ zIndex: 1 }}
                     >
                       <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
