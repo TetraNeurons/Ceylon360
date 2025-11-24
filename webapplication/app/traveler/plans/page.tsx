@@ -385,8 +385,10 @@ export default function TravelerPlansPage() {
       }
     } catch (error: any) {
       console.error("Review submission error:", error);
+      console.error("Error response:", error.response?.data);
       const errorMessage = error.response?.data?.error || "Failed to submit review";
-      toast.error(errorMessage);
+      const errorDetails = error.response?.data?.details;
+      toast.error(errorDetails ? `${errorMessage}: ${errorDetails}` : errorMessage);
       throw new Error(errorMessage);
     }
   };

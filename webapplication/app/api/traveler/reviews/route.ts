@@ -70,8 +70,20 @@ export async function POST(request: NextRequest) {
     }
 
     console.error('Error creating review:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      tripId,
+      revieweeId,
+      rating,
+    });
+    
     return NextResponse.json(
-      { success: false, error: 'Failed to create review' },
+      { 
+        success: false, 
+        error: 'Failed to create review',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
   }
