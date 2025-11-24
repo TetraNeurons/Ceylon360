@@ -13,10 +13,33 @@ function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tripId = searchParams.get("trip_id");
+  const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
-    // Optional: You could fetch trip details here if needed
-  }, [tripId]);
+    // Verify payment status with backend
+    const verifyPayment = async () => {
+      if (sessionId) {
+        try {
+          const response = await fetch("/api/traveler/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ sessionId }),
+          });
+          const data = await response.json();
+          
+          if (data.success) {
+            console.log("Payment verified:", data.paymentStatus);
+          }
+        } catch (error) {
+          console.error("Failed to verify payment:", error);
+        }
+      }
+    };
+
+    verifyPayment();
+  }, [sessionId]);
 
   return (
     <SidebarProvider>
