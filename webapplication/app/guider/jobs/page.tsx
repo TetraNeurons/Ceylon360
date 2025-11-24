@@ -272,7 +272,9 @@ export default function JobsPage() {
                               <h3 className="font-semibold text-gray-900 text-base">{job.traveler.name}</h3>
                               <p className="text-sm text-gray-500 mt-1">{job.country}</p>
                             </div>
-                            <Badge className="bg-blue-600 text-white">IN PROGRESS</Badge>
+                            <Badge className={job.status === 'IN_PROGRESS' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'}>
+                              {job.status === 'IN_PROGRESS' ? 'IN PROGRESS' : 'CONFIRMED'}
+                            </Badge>
                           </div>
 
                           {/* Trip Details */}

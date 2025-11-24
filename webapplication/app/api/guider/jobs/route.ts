@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Query in-progress trips (status = IN_PROGRESS, assigned to this guide)
+    // Query in-progress trips (status = CONFIRMED or IN_PROGRESS, assigned to this guide)
     const inProgressTripsData = await db
       .select({
         trip: trips,
@@ -49,7 +49,10 @@ export async function GET(request: NextRequest) {
       .where(
         and(
           eq(trips.guideId, guide.id),
-          eq(trips.status, 'IN_PROGRESS')
+          or(
+            eq(trips.status, 'CONFIRMED'),
+            eq(trips.status, 'IN_PROGRESS')
+          )
         )
       )
       .orderBy(trips.fromDate);
