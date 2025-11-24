@@ -82,8 +82,25 @@ export default function Home() {
       <Header />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-6 md:px-8 lg:px-12">
-        <div className="container mx-auto text-center space-y-8 max-w-4xl">
+      <section className="relative pt-32 pb-16 px-6 md:px-8 lg:px-12 min-h-[80vh] flex items-center overflow-hidden">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/videos/hero-video.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/50" />
+        </div>
+
+        {/* Content */}
+        <div className="container mx-auto text-center space-y-8 max-w-4xl relative z-10">
           
           {/* Beta Badge */}
           <div className="flex justify-center">
@@ -92,24 +109,24 @@ export default function Home() {
             </Badge>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15]">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white drop-shadow-lg">
             Explore Sri Lanka{" "}
             <br className="hidden sm:block" />
-            <span className="text-primary">Like a Local</span>
+            <span className="text-amber-400">Like a Local</span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto leading-relaxed drop-shadow-md">
             A new way to connect with verified local guides. Be among the first to test our platform and discover hidden places across Sri Lanka.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 px-4 sm:px-0">
-            <Button size="lg" className="w-full sm:w-auto h-12 text-base" asChild>
+            <Button size="lg" className="w-full sm:w-auto h-12 text-base shadow-lg" asChild>
               <Link href="/auth/signup">
                 Join as Traveler
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 text-base" asChild>
+            <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 text-base bg-white/90 hover:bg-white border-white shadow-lg" asChild>
               <Link href="/auth/signup">
                 Apply as Guide
               </Link>
