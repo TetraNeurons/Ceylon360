@@ -157,7 +157,7 @@ export default function SignUpPage() {
               Create an account
             </CardTitle>
             <CardDescription className="text-base">
-              Join Ceylon360 - Step {step} of 2
+              Join Heritage Lanka - Step {step} of 2
             </CardDescription>
           </CardHeader>
 
