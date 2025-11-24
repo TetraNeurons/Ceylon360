@@ -1,8 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Home, ArrowLeft, MapPin, Compass } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center px-4">
       <div className="max-w-2xl w-full text-center">
@@ -12,7 +16,7 @@ export default function NotFound() {
             <div className="w-32 h-32 bg-blue-100 rounded-full animate-ping opacity-20"></div>
           </div>
           <div className="relative flex items-center justify-center">
-            <Compass className="h-32 w-32 text-blue-600 animate-spin-slow" style={{ animationDuration: '8s' }} />
+            <Compass className="h-32 w-32 text-blue-600 animate-spin" />
             <MapPin className="h-16 w-16 text-red-500 absolute" />
           </div>
         </div>
@@ -41,16 +45,13 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button
-            asChild
             variant="outline"
             size="lg"
             className="px-8"
-            onClick={() => window.history.back()}
+            onClick={() => router.back()}
           >
-            <button>
-              <ArrowLeft className="mr-2 h-5 w-5" />
-              Go Back
-            </button>
+            <ArrowLeft className="mr-2 h-5 w-5" />
+            Go Back
           </Button>
         </div>
 
@@ -69,20 +70,6 @@ export default function NotFound() {
           </Link>
         </p>
       </div>
-
-      <style jsx>{`
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
