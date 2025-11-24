@@ -10,7 +10,7 @@ export async function POST(
 ) {
   try {
     const authResult = await verifyAuth(request);
-    if (!authResult.authenticated || authResult.user.role !== "TRAVELER") {
+    if (!authResult.authenticated || authResult.user.role !== "GUIDE") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
@@ -40,12 +40,12 @@ export async function POST(
       );
     }
 
-    // Update trip status to CANCELLED
+    // Update trip status to COMPLETED
     await db
       .update(trips)
       .set({
-        status: "CANCELLED",
-        bookingStatus: "CANCELLED",
+        status: "COMPLETED",
+        bookingStatus: "COMPLETED",
         updatedAt: new Date(),
       })
       .where(eq(trips.id, tripId));
@@ -63,23 +63,24 @@ export async function POST(
         .set({ tripInProgress: false })
         .where(eq(guides.id, trip.guideId));
 
-      // Cancel payment
+      // Release payment to guide
       await db
         .update(payments)
         .set({
-          status: "CANCELLED",
+          status: "RELEASED",
+          releasedAt: new Date(),
         })
         .where(eq(payments.tripId, tripId));
     }
 
     return NextResponse.json({
       success: true,
-      message: "Trip cancelled successfully",
+      message: "Trip completed successfully",
     });
   } catch (error) {
-    console.error("Error cancelling trip:", error);
+    console.error("Error completing trip:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to cancel trip" },
+      { success: false, error: "Failed to complete trip" },
       { status: 500 }
     );
   }

@@ -292,11 +292,17 @@ export default function TravelerPlansPage() {
   };
 
   const canStart = (trip: Trip) => {
-    return (
-      trip.status === "CONFIRMED" &&
-      trip.payment?.status === "PAID" &&
-      !hasActiveTrip
-    );
+    if (trip.status !== "CONFIRMED" || trip.payment?.status !== "PAID" || hasActiveTrip) {
+      return false;
+    }
+    
+    // Check if today is the trip's start date or later
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tripStartDate = new Date(trip.fromDate);
+    tripStartDate.setHours(0, 0, 0, 0);
+    
+    return today >= tripStartDate;
   };
 
   const isReadOnly = (trip: Trip) => {
@@ -586,6 +592,19 @@ export default function TravelerPlansPage() {
                           >
                             <Play className="h-4 w-4 mr-1" />
                             Start Trip
+                          </Button>
+                        )}
+
+                        {/* Track Trip Button - For IN_PROGRESS trips */}
+                        {trip.status === "IN_PROGRESS" && (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            onClick={() => router.push(`/traveler/trip-tracker/${trip.id}`)}
+                            className="flex-1 bg-blue-600 hover:bg-blue-700"
+                          >
+                            <MapPin className="h-4 w-4 mr-1" />
+                            Track Trip
                           </Button>
                         )}
 

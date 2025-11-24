@@ -10,7 +10,7 @@ export async function POST(
 ) {
   try {
     const authResult = await verifyAuth(request);
-    if (!authResult.authenticated || authResult.user.role !== "TRAVELER") {
+    if (!authResult.authenticated || authResult.user.role !== "GUIDE") {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }

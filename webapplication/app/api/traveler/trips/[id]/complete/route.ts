@@ -1,103 +1,86 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/db/drizzle';
-import { trips, travelers, guides } from '@/db/schema';
-import { eq, and } from 'drizzle-orm';
-import { getSession } from '@/lib/jwt';
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/db/drizzle";
+import { trips, travelers, guides, payments } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
+import { verifyAuth } from "@/lib/auth";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: tripId } = await params;
-
-    // Verify authentication
-    const session = await getSession();
-    if (!session?.userId) {
+    const authResult = await verifyAuth(request);
+    if (!authResult.authenticated || authResult.user.role !== "TRAVELER") {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    // Get traveler for authenticated user
-    const [traveler] = await db
-      .select()
-      .from(travelers)
-      .where(eq(travelers.userId, session.userId))
-      .limit(1);
+    const tripId = params.id;
 
-    if (!traveler) {
-      return NextResponse.json(
-        { success: false, error: 'Traveler profile not found' },
-        { status: 404 }
-      );
-    }
-
-    // Verify trip belongs to authenticated traveler
+    // Fetch trip to verify it's in progress
     const [trip] = await db
       .select()
       .from(trips)
-      .where(and(eq(trips.id, tripId), eq(trips.travelerId, traveler.id)))
+      .where(eq(trips.id, tripId))
       .limit(1);
 
     if (!trip) {
       return NextResponse.json(
-        { success: false, error: 'Trip not found or does not belong to you' },
+        { success: false, error: "Trip not found" },
         { status: 404 }
       );
     }
 
-    // Check trip status is IN_PROGRESS
-    if (trip.status !== 'IN_PROGRESS') {
+    if (trip.status !== "IN_PROGRESS") {
       return NextResponse.json(
-        {
-          success: false,
-          error: `Cannot complete trip with status ${trip.status}. Trip must be IN_PROGRESS.`,
-        },
+        { success: false, error: "Trip is not in progress" },
         { status: 400 }
       );
     }
 
-    // Use transaction to update trip, traveler, and guide atomically
-    await db.transaction(async (tx) => {
-      // Update trip status to COMPLETED
-      await tx
-        .update(trips)
-        .set({
-          status: 'COMPLETED',
-          bookingStatus: 'COMPLETED',
-          updatedAt: new Date(),
-        })
-        .where(eq(trips.id, tripId));
+    // Update trip status to COMPLETED
+    await db
+      .update(trips)
+      .set({
+        status: "COMPLETED",
+        bookingStatus: "COMPLETED",
+        updatedAt: new Date(),
+      })
+      .where(eq(trips.id, tripId));
 
-      // Update traveler.tripInProgress to false
-      await tx
-        .update(travelers)
+    // Update traveler's tripInProgress flag
+    await db
+      .update(travelers)
+      .set({ tripInProgress: false })
+      .where(eq(travelers.id, trip.travelerId));
+
+    // Update guide's tripInProgress flag if guide exists
+    if (trip.guideId) {
+      await db
+        .update(guides)
         .set({ tripInProgress: false })
-        .where(eq(travelers.id, traveler.id));
+        .where(eq(guides.id, trip.guideId));
 
-      // If trip has a guide, update guide.tripInProgress to false
-      if (trip.guideId) {
-        await tx
-          .update(guides)
-          .set({ tripInProgress: false })
-          .where(eq(guides.id, trip.guideId));
-      }
+      // Release payment to guide
+      await db
+        .update(payments)
+        .set({
+          status: "RELEASED",
+          releasedAt: new Date(),
+        })
+        .where(eq(payments.tripId, tripId));
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Trip completed successfully",
     });
-
+  } catch (error) {
+    console.error("Error completing trip:", error);
     return NextResponse.json(
-      {
-        success: true,
-        message: 'Trip completed successfully',
-        tripId: tripId,
-      },
-      { status: 200 }
-    );
-  } catch (error: any) {
-    console.error('Complete trip error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Server error', details: error.message },
+      { success: false, error: "Failed to complete trip" },
       { status: 500 }
     );
   }

@@ -384,7 +384,7 @@ export default function JobsPage() {
                             </div>
                           </div>
 
-                          {/* Contact Info and Verify Button */}
+                          {/* Contact Info and Action Buttons */}
                           <div className="flex items-center justify-between pt-2 border-t">
                             <div className="flex items-center gap-2">
                               <Phone className="h-4 w-4 text-gray-400" />
@@ -395,22 +395,34 @@ export default function JobsPage() {
                                 {job.traveler.phone}
                               </a>
                             </div>
-                            {job.status === 'IN_PROGRESS' && !job.verified && (
-                              <Button
-                                size="sm"
-                                onClick={() => handleVerifyOtpClick(job)}
-                                className="bg-green-600 hover:bg-green-700 text-white"
-                              >
-                                <Shield className="h-4 w-4 mr-1" />
-                                Verify OTP
-                              </Button>
-                            )}
-                            {job.status === 'IN_PROGRESS' && job.verified && (
-                              <Badge className="bg-green-600 text-white">
-                                <CheckCircle className="h-3 w-3 mr-1" />
-                                Verified
-                              </Badge>
-                            )}
+                            <div className="flex items-center gap-2">
+                              {job.status === 'IN_PROGRESS' && !job.verified && (
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleVerifyOtpClick(job)}
+                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                >
+                                  <Shield className="h-4 w-4 mr-1" />
+                                  Verify OTP
+                                </Button>
+                              )}
+                              {job.status === 'IN_PROGRESS' && job.verified && (
+                                <>
+                                  <Badge className="bg-green-600 text-white">
+                                    <CheckCircle className="h-3 w-3 mr-1" />
+                                    Verified
+                                  </Badge>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => window.location.href = `/guider/trip-tracker/${job.id}`}
+                                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                                  >
+                                    <MapPin className="h-4 w-4 mr-1" />
+                                    Track Trip
+                                  </Button>
+                                </>
+                              )}
+                            </div>
                           </div>
 
                           {/* Expandable Locations */}
