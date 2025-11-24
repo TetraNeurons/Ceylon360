@@ -21,6 +21,7 @@ import {
 
 import axios from "axios";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 
 const menuItems = [
@@ -31,6 +32,7 @@ const menuItems = [
 
 export function AppSidebar() {
   const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
 
   async function handleSignOut() {
     try {
@@ -41,6 +43,8 @@ export function AppSidebar() {
       setLoading(false);
     }
   }
+
+  const isActive = (href: string) => pathname === href;
 
   return (
     <Sidebar className="w-64">
@@ -61,7 +65,11 @@ export function AppSidebar() {
               <SidebarMenuButton asChild>
                 <a
                   href={item.href}
-                  className="flex items-center gap-4 p-4 h-8 text-lg font-medium hover:bg-muted rounded-lg"
+                  className={`flex items-center gap-4 p-4 h-8 text-lg font-medium rounded-lg transition-colors ${
+                    isActive(item.href)
+                      ? "bg-green-100 text-green-700 font-semibold"
+                      : "hover:bg-muted"
+                  }`}
                 >
                   <item.icon className="h-6 w-6" />
                   <span>{item.label}</span>
