@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db/drizzle';
-import { trips, travelers, payments, guides, users } from '@/db/schema';
+import { trips, travelers, payments, guides, users, tripVerifications } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { getSession } from '@/lib/jwt';
+import geohash from 'ngeohash';
 
 export async function POST(
   request: NextRequest,
@@ -19,6 +20,17 @@ export async function POST(
     }
 
     const { id: tripId } = await params;
+    
+    // Get latitude and longitude from request body
+    const body = await request.json();
+    const { latitude, longitude } = body;
+    
+    if (!latitude || !longitude) {
+      return NextResponse.json(
+        { success: false, error: 'Location coordinates are required' },
+        { status: 400 }
+      );
+    }
 
     // Get traveler for authenticated user
     const [traveler] = await db
@@ -109,8 +121,47 @@ export async function POST(
       );
     }
 
-    // Use transaction to update trip, traveler, and guide atomically
-    const result = await db.transaction(async (tx) => {
+    // Generate 4-digit OTP
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
+    
+    // Generate geohash with precision 5 (approximately 5km x 5km)
+    const travelerGeohash = geohash.encode(latitude, longitude, 5);
+    
+    // Set OTP expiration to 30 minutes from now
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+
+    // Use transaction to create verification record and update trip status
+    await db.transaction(async (tx) => {
+      // Check if verification already exists
+      const [existingVerification] = await tx
+        .select()
+        .from(tripVerifications)
+        .where(eq(tripVerifications.tripId, tripId))
+        .limit(1);
+      
+      if (existingVerification) {
+        // Update existing verification
+        await tx
+          .update(tripVerifications)
+          .set({
+            otp,
+            travelerGeohash,
+            guideGeohash: null,
+            verified: false,
+            verifiedAt: null,
+            expiresAt,
+          })
+          .where(eq(tripVerifications.tripId, tripId));
+      } else {
+        // Create new verification record
+        await tx.insert(tripVerifications).values({
+          tripId,
+          otp,
+          travelerGeohash,
+          expiresAt,
+        });
+      }
+
       // Update trip status to IN_PROGRESS and bookingStatus to ACCEPTED
       await tx
         .update(trips)
@@ -160,12 +211,13 @@ export async function POST(
       }
     }
 
-    // Return success response with guide phone
+    // Return success response with OTP and guide phone
     return NextResponse.json(
       {
         success: true,
-        message: 'Trip started successfully',
+        message: 'Trip started successfully. Share the OTP with your guide.',
         tripId: tripId,
+        otp: otp,
         guidePhone: guidePhone,
       },
       { status: 200 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db/drizzle';
-import { trips, travelers, users, guides, tripLocations } from '@/db/schema';
+import { trips, travelers, users, guides, tripLocations, tripVerifications } from '@/db/schema';
 import { eq, and, or, desc } from 'drizzle-orm';
 import { getSession } from '@/lib/jwt';
 
@@ -88,6 +88,13 @@ export async function GET(request: NextRequest) {
           .where(eq(tripLocations.tripId, trip.id))
           .orderBy(tripLocations.dayNumber, tripLocations.visitOrder);
 
+        // Get verification status
+        const [verification] = await db
+          .select()
+          .from(tripVerifications)
+          .where(eq(tripVerifications.tripId, trip.id))
+          .limit(1);
+
         // Calculate days remaining
         const now = new Date();
         const endDate = new Date(trip.toDate);
@@ -105,6 +112,7 @@ export async function GET(request: NextRequest) {
           country: trip.country,
           totalDistance: trip.totalDistance,
           status: trip.status,
+          verified: verification?.verified || false,
           locations: locations.map(loc => ({
             id: loc.id,
             title: loc.title,

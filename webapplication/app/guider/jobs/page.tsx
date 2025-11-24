@@ -16,8 +16,20 @@ import {
   ChevronUp,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  Shield
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface TripLocation {
   id: string;
@@ -41,6 +53,7 @@ interface InProgressJob {
   country: string;
   totalDistance: number | null;
   status: string;
+  verified: boolean;
   locations: TripLocation[];
   daysRemaining: number;
 }
@@ -78,6 +91,11 @@ export default function JobsPage() {
   const [error, setError] = useState<string | null>(null);
   const [expandedJobs, setExpandedJobs] = useState<Set<string>>(new Set());
   const [historyFilter, setHistoryFilter] = useState<'ALL' | 'COMPLETED' | 'CANCELLED'>('ALL');
+  const [otpDialogOpen, setOtpDialogOpen] = useState(false);
+  const [selectedJobForVerification, setSelectedJobForVerification] = useState<InProgressJob | null>(null);
+  const [otpInput, setOtpInput] = useState("");
+  const [verifying, setVerifying] = useState(false);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
 
   // Update time
   useEffect(() => {
@@ -138,6 +156,73 @@ export default function JobsPage() {
     if (historyFilter === 'ALL') return true;
     return job.status === historyFilter;
   }) || [];
+
+  const handleVerifyOtpClick = (job: InProgressJob) => {
+    setSelectedJobForVerification(job);
+    // Get user's current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setOtpDialogOpen(true);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          toast.error('Please enable location access to verify the trip');
+        }
+      );
+    } else {
+      toast.error('Geolocation is not supported by your browser');
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!selectedJobForVerification || !userLocation || !otpInput) {
+      toast.error('Please enter the OTP');
+      return;
+    }
+
+    if (otpInput.length !== 4) {
+      toast.error('OTP must be 4 digits');
+      return;
+    }
+
+    try {
+      setVerifying(true);
+      const response = await fetch(`/api/guider/trips/${selectedJobForVerification.id}/verify-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          otp: otpInput,
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(data.message);
+        setOtpDialogOpen(false);
+        setOtpInput("");
+        setSelectedJobForVerification(null);
+        setUserLocation(null);
+        // Refresh jobs data
+        await fetchJobsData();
+      } else {
+        toast.error(data.error);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      toast.error("Failed to verify OTP. Please try again.");
+    } finally {
+      setVerifying(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -299,15 +384,33 @@ export default function JobsPage() {
                             </div>
                           </div>
 
-                          {/* Contact Info */}
-                          <div className="flex items-center gap-2 pt-2 border-t">
-                            <Phone className="h-4 w-4 text-gray-400" />
-                            <a 
-                              href={`tel:${job.traveler.phone}`} 
-                              className="text-sm font-medium text-blue-600 hover:underline"
-                            >
-                              {job.traveler.phone}
-                            </a>
+                          {/* Contact Info and Verify Button */}
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <div className="flex items-center gap-2">
+                              <Phone className="h-4 w-4 text-gray-400" />
+                              <a 
+                                href={`tel:${job.traveler.phone}`} 
+                                className="text-sm font-medium text-blue-600 hover:underline"
+                              >
+                                {job.traveler.phone}
+                              </a>
+                            </div>
+                            {job.status === 'IN_PROGRESS' && !job.verified && (
+                              <Button
+                                size="sm"
+                                onClick={() => handleVerifyOtpClick(job)}
+                                className="bg-green-600 hover:bg-green-700 text-white"
+                              >
+                                <Shield className="h-4 w-4 mr-1" />
+                                Verify OTP
+                              </Button>
+                            )}
+                            {job.status === 'IN_PROGRESS' && job.verified && (
+                              <Badge className="bg-green-600 text-white">
+                                <CheckCircle className="h-3 w-3 mr-1" />
+                                Verified
+                              </Badge>
+                            )}
                           </div>
 
                           {/* Expandable Locations */}
@@ -462,6 +565,83 @@ export default function JobsPage() {
           </main>
         </div>
       </div>
+
+      {/* OTP Verification Dialog */}
+      <Dialog open={otpDialogOpen} onOpenChange={setOtpDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-green-600" />
+              Verify Trip Start
+            </DialogTitle>
+            <DialogDescription>
+              Enter the 4-digit OTP provided by {selectedJobForVerification?.traveler.name} to verify and start the trip
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="otp">Enter OTP</Label>
+              <Input
+                id="otp"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={4}
+                placeholder="Enter 4-digit OTP"
+                value={otpInput}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  setOtpInput(value);
+                }}
+                className="text-center text-2xl tracking-widest font-bold"
+                disabled={verifying}
+              />
+            </div>
+            
+            <div className="bg-blue-50 p-3 rounded-lg text-sm text-gray-700">
+              <p className="font-medium mb-1">Important:</p>
+              <ul className="list-disc list-inside space-y-1 text-xs">
+                <li>You must be near the traveler's location</li>
+                <li>The OTP is valid for 30 minutes</li>
+                <li>Your location will be verified automatically</li>
+              </ul>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setOtpDialogOpen(false);
+                setOtpInput("");
+                setSelectedJobForVerification(null);
+                setUserLocation(null);
+              }}
+              disabled={verifying}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleVerifyOtp}
+              disabled={verifying || otpInput.length !== 4}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {verifying ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Verifying...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Verify & Start
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SidebarProvider>
   );
 }

@@ -122,6 +122,9 @@ importers:
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      ngeohash:
+        specifier: ^0.6.3
+        version: 0.6.3
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -168,6 +171,9 @@ importers:
       '@types/leaflet':
         specifier: ^1.9.21
         version: 1.9.21
+      '@types/ngeohash':
+        specifier: ^0.6.8
+        version: 0.6.8
       '@types/node':
         specifier: ^20
         version: 20.19.25
@@ -1854,6 +1860,9 @@ packages:
   '@types/ms@2.1.0':
     resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
+  '@types/ngeohash@0.6.8':
+    resolution: {integrity: sha512-A90x3HMwE1yXbWCnd0ztHzv8rAQPjwTzX2diYI/6OrWm/3oairDaehw5WPWJFgZ+8+J/OuF99IbipmMa2le6tQ==}
+
   '@types/node@20.19.25':
     resolution: {integrity: sha512-ZsJzA5thDQMSQO788d7IocwwQbI8B5OPzmqNvpf3NY/+MHDAS759Wo0gd2WQeXYt5AAAQjzcrTVC6SKCuYgoCQ==}
 
@@ -3371,6 +3380,10 @@ packages:
         optional: true
       sass:
         optional: true
+
+  ngeohash@0.6.3:
+    resolution: {integrity: sha512-kltF0cOxgx1AbmVzKxYZaoB0aj7mOxZeHaerEtQV0YaqnkXNq26WWqMmJ6lTqShYxVRWZ/mwvvTrNeOwdslWiw==}
+    engines: {node: '>=v0.2.0'}
 
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
@@ -5691,6 +5704,8 @@ snapshots:
 
   '@types/ms@2.1.0': {}
 
+  '@types/ngeohash@0.6.8': {}
+
   '@types/node@20.19.25':
     dependencies:
       undici-types: 6.21.0
@@ -7343,6 +7358,8 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  ngeohash@0.6.3: {}
 
   node-domexception@1.0.0: {}
 
