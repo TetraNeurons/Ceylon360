@@ -354,18 +354,27 @@ export default function TravelerPlansPage() {
   };
 
   const handleReviewSubmit = async (rating: number, comment: string) => {
-    if (!selectedTrip || !selectedTrip.guide) return;
+    if (!selectedTrip || !selectedTrip.guide) {
+      throw new Error("Trip or guide information is missing");
+    }
 
     try {
-      // Get the guide's user ID from the trip
-      const response = await axios.post("/api/traveler/reviews", {
+      console.log("Submitting review:", {
         tripId: selectedTrip.id,
         revieweeId: selectedTrip.guide.userId,
         rating,
         comment,
       });
 
+      const response = await axios.post("/api/traveler/reviews", {
+        tripId: selectedTrip.id,
+        revieweeId: selectedTrip.guide.userId,
+        rating,
+        comment: comment || "", // Ensure comment is at least an empty string
+      });
+
       if (response.data.success) {
+        toast.success("Review submitted successfully!");
         // Refresh eligibility
         await checkReviewEligibility(selectedTrip.id);
         // Close dialog after a short delay
@@ -375,7 +384,10 @@ export default function TravelerPlansPage() {
         }, 2000);
       }
     } catch (error: any) {
-      throw new Error(error.response?.data?.error || "Failed to submit review");
+      console.error("Review submission error:", error);
+      const errorMessage = error.response?.data?.error || "Failed to submit review";
+      toast.error(errorMessage);
+      throw new Error(errorMessage);
     }
   };
 
