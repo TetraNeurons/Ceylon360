@@ -216,6 +216,19 @@ export default function PlanMakerContent() {
     return null;
   }
 
+  // Component to fix map rendering in dialog
+  function MapResizer() {
+    const map = useMap();
+    useEffect(() => {
+      // Small delay to ensure dialog is fully rendered
+      const timer = setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+      return () => clearTimeout(timer);
+    }, [map]);
+    return null;
+  }
+
   async function handleSearch() {
     if (!search.trim() || isSearching.current) return;
     isSearching.current = true;
@@ -807,6 +820,7 @@ export default function PlanMakerContent() {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; OpenStreetMap'
                       />
+                      <MapResizer />
                       <FlyToLocation location={flyToLoc} />
 
                       {validLocations.map((loc, idx) => (
