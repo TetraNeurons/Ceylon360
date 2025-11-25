@@ -146,16 +146,31 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-white/80 backdrop-blur-lg shadow-sm">
+    <div className="min-h-screen flex flex-col relative">
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/videos/hero-video.mp4" type="video/mp4" />
+      </video>
+
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent bg-transparent">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500 text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm text-white border border-white/20">
                 <span className="text-xl font-bold font-poppins">H</span>
               </div>
-              <span className="text-2xl font-bold tracking-tight text-gray-900 font-dancing-script">
+              <span className="text-2xl font-bold tracking-tight text-white font-dancing-script">
                 Heritage <span className="ml-2">Lanka</span>
               </span>
             </Link>
@@ -163,7 +178,7 @@ export default function SignUpPage() {
             {/* Navigation */}
             <div className="flex items-center space-x-4">
               <Link href="/auth/signin">
-                <Button variant="ghost" className="text-gray-700 hover:bg-gray-100 font-poppins font-semibold">
+                <Button variant="ghost" className="text-white hover:bg-white/20 font-poppins font-semibold shadow-lg">
                   Sign In
                 </Button>
               </Link>
@@ -172,10 +187,10 @@ export default function SignUpPage() {
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 pt-24 pb-8">
-        <Card className="w-full max-w-md shadow-lg border-muted">
-          <CardHeader className="space-y-1 text-center pb-6">
-            <CardTitle className="text-3xl font-bold tracking-tight">
+      <main className="flex-1 flex items-center justify-center p-4 pt-24 pb-8 relative z-10">
+        <Card className="w-full max-w-md bg-white/95 backdrop-blur-md border-2 border-gray-100 shadow-2xl">
+          <CardHeader className="space-y-1 text-center pb-6 pt-8 px-8">
+            <CardTitle className="text-3xl font-bold tracking-tight font-poppins">
               Create an account
             </CardTitle>
             <CardDescription className="text-base">
@@ -183,9 +198,9 @@ export default function SignUpPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className="px-8">
             {error && (
-              <div className="bg-destructive/15 border border-destructive/30 text-destructive text-sm p-3 rounded-lg mb-6 flex items-start gap-2">
+              <div className="bg-red-50 border-2 border-red-200 text-red-600 text-sm p-4 rounded-lg mb-6 flex items-start gap-2 font-medium">
                 <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                 </svg>
@@ -198,7 +213,7 @@ export default function SignUpPage() {
               {[1, 2].map(s => (
                 <div
                   key={s}
-                  className={`h-2 flex-1 mx-1 rounded-full transition-colors ${s <= step ? 'bg-primary' : 'bg-muted'
+                  className={`h-2 flex-1 mx-1 rounded-full transition-colors ${s <= step ? 'bg-amber-500' : 'bg-gray-200'
                     }`}
                 />
               ))}
@@ -411,10 +426,10 @@ export default function SignUpPage() {
             )}
           </CardContent>
 
-          <CardFooter>
-            <p className="text-center text-sm w-full">
+          <CardFooter className="pb-8 px-8">
+            <p className="text-center text-sm w-full text-gray-600">
               Already have an account?
-              <Link href="/auth/signin" className="text-primary ml-1 hover:underline">Sign In</Link>
+              <Link href="/auth/signin" className="text-amber-600 hover:text-amber-700 ml-1 hover:underline font-semibold">Sign In</Link>
             </p>
           </CardFooter>
         </Card>
