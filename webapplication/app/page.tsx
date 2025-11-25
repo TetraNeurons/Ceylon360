@@ -543,10 +543,10 @@ export default function Home() {
 
           {!adSuccess ? (
             <Card className="bg-white/95 backdrop-blur-md border-2 border-gray-100 shadow-2xl">
-              <CardHeader className="pb-6 pt-6 px-12 text-center">
+              <CardHeader className="pb-6 pt-6 px-6 md:px-12 text-center">
                 <CardTitle className="text-2xl font-bold tracking-tight">Submit Your Advertisement</CardTitle>
               </CardHeader>
-              <CardContent className="px-12 pb-8">
+              <CardContent className="px-6 md:px-12 pb-8">
                 <form onSubmit={handleAdSubmit} className="space-y-5">
                   <div>
                     <Label htmlFor="imageUrl" className="text-base font-semibold">Image URL *</Label>
