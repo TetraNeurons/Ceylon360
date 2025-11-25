@@ -107,7 +107,7 @@ export default function AdminDashboardPage() {
   const [apiLoading, setApiLoading] = useState(true);
   const [adAnalytics, setAdAnalytics] = useState<AdAnalytics | null>(null);
   const [adLoading, setAdLoading] = useState(true);
-  const [aiStats, setAiStats] = useState<{ totalRequests: number; successRate: number; totalTokens: number } | null>(null);
+  const [aiStats, setAiStats] = useState<{ totalRequests: number; successRate: number } | null>(null);
   const [aiLoading, setAiLoading] = useState(true);
 
   useEffect(() => {
@@ -194,7 +194,6 @@ export default function AdminDashboardPage() {
         setAiStats({
           totalRequests: data.stats.totalRequests,
           successRate: data.stats.successRate,
-          totalTokens: data.stats.totalTokens,
         });
       } else {
         console.error("Failed to fetch AI stats:", data.error);
@@ -440,7 +439,7 @@ export default function AdminDashboardPage() {
                         </div>
                       ) : aiStats ? (
                         <div className="space-y-4">
-                          <div className="grid grid-cols-3 gap-4">
+                          <div className="grid grid-cols-2 gap-4">
                             <div className="bg-purple-50 p-4 rounded-lg">
                               <div className="text-sm text-purple-600 mb-1">Total Requests</div>
                               <div className="text-2xl font-bold text-purple-900">{aiStats.totalRequests}</div>
@@ -448,10 +447,6 @@ export default function AdminDashboardPage() {
                             <div className="bg-green-50 p-4 rounded-lg">
                               <div className="text-sm text-green-600 mb-1">Success Rate</div>
                               <div className="text-2xl font-bold text-green-900">{aiStats.successRate.toFixed(1)}%</div>
-                            </div>
-                            <div className="bg-blue-50 p-4 rounded-lg">
-                              <div className="text-sm text-blue-600 mb-1">Total Tokens</div>
-                              <div className="text-2xl font-bold text-blue-900">{aiStats.totalTokens}</div>
                             </div>
                           </div>
                           <div className="pt-2">

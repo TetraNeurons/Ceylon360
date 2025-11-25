@@ -38,15 +38,12 @@ interface AIStats {
   failedRequests: number;
   successRate: number;
   avgResponseTime: number;
-  totalTokens: number;
-  avgTokensPerRequest: number;
 }
 
 interface WorkflowStat {
   workflowType: string;
   count: number;
   successRate: number;
-  avgTokens: number;
 }
 
 interface TopUser {
@@ -54,7 +51,6 @@ interface TopUser {
   userName: string;
   userEmail: string;
   requestCount: number;
-  tokensUsed: number;
   successRate: number;
 }
 
@@ -72,7 +68,6 @@ interface TimeSeriesPoint {
   requests: number;
   successes: number;
   failures: number;
-  tokens: number;
 }
 
 export default function AIAnalyticsPage() {
@@ -116,9 +111,9 @@ export default function AIAnalyticsPage() {
       return { status: "unknown", color: "gray", label: "No Data" };
     }
     
-    if (stats.successRate >= 95) {
+    if (stats.successRate >= 90) {
       return { status: "healthy", color: "green", label: "Healthy" };
-    } else if (stats.successRate >= 85) {
+    } else if (stats.successRate >= 75) {
       return { status: "warning", color: "yellow", label: "Warning" };
     } else {
       return { status: "critical", color: "red", label: "Critical" };
@@ -210,7 +205,7 @@ export default function AIAnalyticsPage() {
 
             {/* Key Metrics */}
             {stats && stats.totalRequests > 0 && (
-              <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <div className="bg-white/95 backdrop-blur-md border-2 border-white shadow-xl rounded-2xl overflow-hidden">
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-2">
@@ -254,18 +249,6 @@ export default function AIAnalyticsPage() {
                     </div>
                     <div className="text-sm font-poppins font-medium text-gray-600 mb-2">Avg Response</div>
                     <div className="text-3xl font-bold font-poppins text-orange-900">{stats.avgResponseTime}ms</div>
-                  </div>
-                </div>
-
-                <div className="bg-white/95 backdrop-blur-md border-2 border-white shadow-xl rounded-2xl overflow-hidden">
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-3 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl">
-                        <Zap className="h-7 w-7 text-white" />
-                      </div>
-                    </div>
-                    <div className="text-sm font-poppins font-medium text-gray-600 mb-2">Total Tokens</div>
-                    <div className="text-3xl font-bold font-poppins text-purple-900">{stats.totalTokens}</div>
                   </div>
                 </div>
               </div>
@@ -351,7 +334,7 @@ export default function AIAnalyticsPage() {
                         <div className="text-right">
                           <div className="font-semibold text-gray-900">{user.requestCount} requests</div>
                           <div className="text-sm text-gray-500">
-                            {user.tokensUsed} tokens • {user.successRate.toFixed(1)}% success
+                            {user.successRate.toFixed(1)}% success
                           </div>
                         </div>
                       </div>
