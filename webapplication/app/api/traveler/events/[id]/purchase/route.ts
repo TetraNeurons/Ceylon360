@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/db/drizzle';
-import { events, payments, travelers } from '@/db/schema';
+import { events, payments, travelers, eventTickets } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { getSession } from '@/lib/jwt';
 import Stripe from 'stripe';
@@ -99,12 +99,20 @@ export async function POST(
       })
       .returning();
 
-    // For free events, decrement ticket count immediately
+    // For free events, decrement ticket count immediately and create ticket record
     if (isFreeEvent) {
       await db
         .update(events)
         .set({ ticketCount: eventData.ticketCount - quantity })
         .where(eq(events.id, eventId));
+
+      // Create event ticket record
+      await db.insert(eventTickets).values({
+        eventId,
+        travelerId: traveler.id,
+        paymentId: payment.id,
+        quantity,
+      });
     }
 
     const result = { payment, event: eventData, amount, isFreeEvent };

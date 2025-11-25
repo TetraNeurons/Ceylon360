@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import { stripe } from '@/lib/stripe';
 import { db } from '@/db/drizzle';
-import { payments, events } from '@/db/schema';
+import { payments, events, eventTickets } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import Stripe from 'stripe';
 
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
         console.log('Payment updated to PAID:', payment.id);
 
         // Decrement ticket count for the event (only if eventId exists)
-        if (payment.eventId && payment.ticketQuantity) {
+        if (payment.eventId && payment.ticketQuantity && payment.travelerId) {
           const [eventRecord] = await db
             .select()
             .from(events)
@@ -94,6 +94,18 @@ export async function POST(request: NextRequest) {
 
             console.log(
               `Decremented ticket count for event ${payment.eventId}: ${eventRecord.ticketCount} -> ${newTicketCount}`
+            );
+
+            // Create event ticket record
+            await db.insert(eventTickets).values({
+              eventId: payment.eventId,
+              travelerId: payment.travelerId,
+              paymentId: payment.id,
+              quantity: payment.ticketQuantity,
+            });
+
+            console.log(
+              `Created event ticket record for traveler ${payment.travelerId}, event ${payment.eventId}, quantity ${payment.ticketQuantity}`
             );
           } else {
             console.error('Event not found for payment:', payment.eventId);

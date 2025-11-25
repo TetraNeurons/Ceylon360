@@ -239,6 +239,16 @@ export const tripVerifications = pgTable('trip_verifications', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+// Event Tickets table - Many-to-many relationship between travelers and events
+export const eventTickets = pgTable('event_tickets', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  eventId: text('event_id').notNull().references(() => events.id, { onDelete: 'cascade' }),
+  travelerId: text('traveler_id').notNull().references(() => travelers.id, { onDelete: 'cascade' }),
+  paymentId: text('payment_id').references(() => payments.id, { onDelete: 'set null' }),
+  quantity: integer('quantity').notNull().default(1),
+  purchasedAt: timestamp('purchased_at').defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ one }) => ({
   traveler: one(travelers, {
@@ -258,6 +268,7 @@ export const travelersRelations = relations(travelers, ({ one, many }) => ({
   }),
   trips: many(trips),
   reviews: many(reviews),
+  eventTickets: many(eventTickets),
 }));
 
 export const guidesRelations = relations(guides, ({ one, many }) => ({
@@ -323,6 +334,7 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
 
 export const eventsRelations = relations(events, ({ many }) => ({
   payments: many(payments),
+  eventTickets: many(eventTickets),
 }));
 
 export const guideDeclinationsRelations = relations(guideDeclinations, ({ one }) => ({
@@ -361,5 +373,20 @@ export const tripVerificationsRelations = relations(tripVerifications, ({ one })
   trip: one(trips, {
     fields: [tripVerifications.tripId],
     references: [trips.id],
+  }),
+}));
+
+export const eventTicketsRelations = relations(eventTickets, ({ one }) => ({
+  event: one(events, {
+    fields: [eventTickets.eventId],
+    references: [events.id],
+  }),
+  traveler: one(travelers, {
+    fields: [eventTickets.travelerId],
+    references: [travelers.id],
+  }),
+  payment: one(payments, {
+    fields: [eventTickets.paymentId],
+    references: [payments.id],
   }),
 }));
