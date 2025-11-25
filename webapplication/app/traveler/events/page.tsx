@@ -158,11 +158,11 @@ export default function EventsPage() {
                 </div>
 
                 <div className="p-5 space-y-3">
-                  <h2 className="text-xl font-bold text-gray-900 line-clamp-2 font-poppins">
+                  <h2 className="text-base lg:text-lg font-bold text-gray-900 line-clamp-2 font-poppins">
                     {event.title}
                   </h2>
 
-                  <div className="space-y-2 text-sm text-gray-700">
+                  <div className="space-y-2 text-xs lg:text-sm text-gray-700">
                     <p className="flex items-center gap-2 font-medium font-poppins">
                       <Calendar className="w-4 h-4 text-amber-600" /> {event.date}
                     </p>
@@ -188,7 +188,7 @@ export default function EventsPage() {
 
                     <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto p-6 bg-white/95 backdrop-blur-md border-2 border-gray-200 shadow-2xl">
                       <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold pr-8 font-poppins text-gray-900">
+                        <DialogTitle className="text-xl lg:text-2xl font-bold pr-8 font-poppins text-gray-900">
                           {event.title}
                         </DialogTitle>
                       </DialogHeader>
@@ -217,10 +217,10 @@ export default function EventsPage() {
 
                       {/* Info */}
                       <div className="my-5">
-                        <h3 className="font-semibold text-lg mb-2">
+                        <h3 className="font-semibold text-base lg:text-lg mb-2">
                           About this Event
                         </h3>
-                        <p className="text-gray-700 leading-relaxed">
+                        <p className="text-sm text-gray-700 leading-relaxed">
                           {event.description}
                         </p>
                       </div>
@@ -231,8 +231,8 @@ export default function EventsPage() {
                           <div className="flex items-start gap-3">
                             <Calendar className="w-5 h-5 text-gray-500 mt-0.5" />
                             <div>
-                              <p className="font-medium">Date</p>
-                              <p className="text-sm text-gray-600">
+                              <p className="font-medium text-sm lg:text-base">Date</p>
+                              <p className="text-xs lg:text-sm text-gray-600">
                                 {event.date}
                               </p>
                             </div>
@@ -241,8 +241,8 @@ export default function EventsPage() {
                           <div className="flex items-start gap-3">
                             <MapPin className="w-5 h-5 text-gray-500 mt-0.5" />
                             <div>
-                              <p className="font-medium">Location</p>
-                              <p className="text-sm text-gray-600">
+                              <p className="font-medium text-sm lg:text-base">Location</p>
+                              <p className="text-xs lg:text-sm text-gray-600">
                                 {event.place}
                               </p>
                             </div>
@@ -251,8 +251,8 @@ export default function EventsPage() {
                           <div className="flex items-start gap-3">
                             <Phone className="w-5 h-5 text-gray-500 mt-0.5" />
                             <div>
-                              <p className="font-medium">Contact</p>
-                              <p className="text-sm text-black font-medium">
+                              <p className="font-medium text-sm lg:text-base">Contact</p>
+                              <p className="text-xs lg:text-sm text-black font-medium">
                                 {event.phone}
                               </p>
                               <p className="text-xs text-gray-500">
@@ -264,8 +264,8 @@ export default function EventsPage() {
                           <div className="flex items-start gap-3">
                             <Ticket className="w-5 h-5 text-gray-500 mt-0.5" />
                             <div>
-                              <p className="font-medium">Availability</p>
-                              <p className="text-sm text-gray-800 font-medium">
+                              <p className="font-medium text-sm lg:text-base">Availability</p>
+                              <p className="text-xs lg:text-sm text-gray-800 font-medium">
                                 {event.ticketCount} tickets
                               </p>
                             </div>
