@@ -35,15 +35,12 @@ interface AIStats {
   failedRequests: number;
   successRate: number;
   avgResponseTime: number;
-  totalTokens: number;
-  avgTokensPerRequest: number;
 }
 
 interface WorkflowStat {
   workflowType: string;
   count: number;
   successRate: number;
-  avgTokens: number;
 }
 
 interface TopUser {
@@ -51,7 +48,6 @@ interface TopUser {
   userName: string;
   userEmail: string;
   requestCount: number;
-  tokensUsed: number;
   successRate: number;
 }
 
@@ -69,7 +65,6 @@ interface TimeSeriesPoint {
   requests: number;
   successes: number;
   failures: number;
-  tokens: number;
 }
 
 export default function AIAnalyticsPage() {
@@ -336,7 +331,7 @@ export default function AIAnalyticsPage() {
                         <div className="text-right">
                           <div className="font-semibold text-gray-900">{user.requestCount} requests</div>
                           <div className="text-sm text-gray-500">
-                            {user.tokensUsed} tokens • {user.successRate.toFixed(1)}% success
+                            {user.successRate.toFixed(1)}% success
                           </div>
                         </div>
                       </div>
