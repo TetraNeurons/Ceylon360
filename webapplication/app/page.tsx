@@ -185,102 +185,186 @@ export default function Home() {
           {activeTab === "traveler" ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {/* Step 1 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <Calendar className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">01</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Create Request</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    Tell us where you want to go and what you want to see.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <Calendar className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">01</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Create Request</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Tell us where you want to go and what you want to see.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Create Request</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Simply share your travel preferences, desired destinations, and dates. Our platform makes it easy to communicate your needs to local guides who know the area best.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
 
               {/* Step 2 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <Users className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">02</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Get Matched</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    We connect you with available local guides in that area.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <Users className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">02</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Get Matched</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        We connect you with available local guides in that area.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Get Matched</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Our intelligent system connects you with verified local guides who specialize in your areas of interest. Receive personalized recommendations based on your preferences.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
 
               {/* Step 3 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <MapPin className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">03</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Explore</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    Meet your guide and enjoy a safe, local experience.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <MapPin className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">03</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Explore</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Meet your guide and enjoy a safe, local experience.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Explore</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Experience Sri Lanka like never before with authentic local insights. Your guide ensures a safe, memorable journey through hidden gems and cultural treasures.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
               {/* Step 1 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <Shield className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">01</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Register</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    Sign up with your details. We verify every guide manually.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <Shield className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">01</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Register</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Sign up with your details. We verify every guide manually.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Register</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Complete your profile with your expertise, language skills, and areas of specialization. Our thorough verification process ensures quality and trustworthiness for all travelers.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
 
               {/* Step 2 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <Globe className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">02</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Receive Jobs</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    Get notifications when travelers are looking for guides in your area.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <Globe className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">02</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Receive Jobs</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Get notifications when travelers are looking for guides in your area.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Receive Jobs</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Get instant notifications when travelers request guides in your area. Review requests, check schedules, and accept jobs that match your availability and expertise.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
 
               {/* Step 3 */}
-              <Card className="border-gray-200 bg-white/95 backdrop-blur-md shadow-xl hover:bg-white transition-all group">
-                <CardContent className="p-6 space-y-4">
-                  <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400/30 transition-all">
-                    <Star className="h-7 w-7 text-amber-600" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-5xl font-black text-black/5">03</div>
-                    <h3 className="text-xl font-bold text-black -mt-6">Get Paid</h3>
-                  </div>
-                  <p className="text-gray-700 leading-relaxed text-sm">
-                    Complete the tour and receive payments directly.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="perspective-1000 h-64">
+                <div className="relative w-full h-full transition-transform duration-700 transform-style-3d hover:rotate-y-180">
+                  {/* Front */}
+                  <Card className="absolute inset-0 border-gray-200 bg-white/95 backdrop-blur-md shadow-xl backface-hidden">
+                    <CardContent className="p-6 space-y-4 h-full flex flex-col justify-center items-center text-center">
+                      <div className="h-14 w-14 rounded-xl bg-amber-400/20 flex items-center justify-center transition-all">
+                        <Star className="h-7 w-7 text-amber-600" />
+                      </div>
+                      <div className="space-y-2 relative w-full">
+                        <div className="text-5xl font-black text-black/20 absolute top-0 left-1/2 transform -translate-x-1/2">03</div>
+                        <h3 className="text-xl font-bold text-black pt-12">Get Paid</h3>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Complete the tour and receive payments directly.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  {/* Back */}
+                  <Card className="absolute inset-0 border-gray-200 bg-amber-500 backdrop-blur-md shadow-xl backface-hidden rotate-y-180">
+                    <CardContent className="p-6 h-full flex flex-col justify-center items-center text-center">
+                      <h3 className="text-xl font-bold text-white mb-4">Get Paid</h3>
+                      <p className="text-white/90 text-sm leading-relaxed">
+                        Receive secure, direct payments upon tour completion. Set your own rates, track your earnings, and build your reputation through positive reviews from satisfied travelers.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
             </div>
           )}
         </div>
