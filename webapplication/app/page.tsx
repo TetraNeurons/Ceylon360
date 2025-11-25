@@ -444,26 +444,28 @@ export default function Home() {
         {/* Content */}
         <div className="container mx-auto max-w-4xl relative z-10">
           <div className="text-center mb-12">
-            <div className="flex justify-center mb-4">
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Megaphone className="h-6 w-6 text-primary" />
+            <div className="flex justify-center mb-6">
+              <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center">
+                <Megaphone className="h-8 w-8 text-amber-600" />
               </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Advertise With Us</h2>
-            <p className="text-muted-foreground text-lg">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+              Advertise <span className="text-amber-500">With Us</span>
+            </h2>
+            <p className="text-lg text-gray-600">
               Reach thousands of travelers exploring Sri Lanka. Only 50 LKR per day!
             </p>
           </div>
 
           {!adSuccess ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Submit Your Advertisement</CardTitle>
+            <Card className="bg-white/95 backdrop-blur-md border-2 border-gray-100 shadow-2xl">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-2xl font-bold tracking-tight">Submit Your Advertisement</CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleAdSubmit} className="space-y-4">
+                <form onSubmit={handleAdSubmit} className="space-y-5">
                   <div>
-                    <Label htmlFor="imageUrl">Image URL *</Label>
+                    <Label htmlFor="imageUrl" className="text-base font-semibold">Image URL *</Label>
                     <Input
                       id="imageUrl"
                       type="url"
@@ -471,11 +473,12 @@ export default function Home() {
                       value={adForm.imageUrl}
                       onChange={(e) => setAdForm({ ...adForm, imageUrl: e.target.value })}
                       required
+                      className="mt-2 h-12"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="description">Description * (Max 500 characters)</Label>
+                    <Label htmlFor="description" className="text-base font-semibold">Description * (Max 500 characters)</Label>
                     <Textarea
                       id="description"
                       placeholder="Describe your advertisement..."
@@ -484,14 +487,15 @@ export default function Home() {
                       maxLength={500}
                       rows={4}
                       required
+                      className="mt-2"
                     />
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs text-gray-500 mt-2">
                       {adForm.description.length}/500 characters
                     </p>
                   </div>
 
                   <div>
-                    <Label htmlFor="redirectUrl">Redirect URL *</Label>
+                    <Label htmlFor="redirectUrl" className="text-base font-semibold">Redirect URL *</Label>
                     <Input
                       id="redirectUrl"
                       type="url"
@@ -499,33 +503,46 @@ export default function Home() {
                       value={adForm.redirectUrl}
                       onChange={(e) => setAdForm({ ...adForm, redirectUrl: e.target.value })}
                       required
+                      className="mt-2 h-12"
                     />
                   </div>
 
                   {adError && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-600 text-sm">
+                    <div className="p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-600 text-sm font-medium">
                       {adError}
                     </div>
                   )}
 
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                    <h4 className="font-semibold text-sm mb-2">Payment Instructions</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Price: 50 LKR per day</li>
-                      <li>• Payment via bank transfer</li>
-                      <li>• Include the payment reference ID in your transfer description</li>
-                      <li>• Your ad will be reviewed and activated after payment verification</li>
+                  <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-5">
+                    <h4 className="font-bold text-base mb-3 text-gray-900">Payment Instructions</h4>
+                    <ul className="text-sm text-gray-700 space-y-2">
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Price: 50 LKR per day</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Payment via bank transfer</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Include the payment reference ID in your transfer description</span>
+                      </li>
+                      <li className="flex items-start">
+                        <span className="mr-2">•</span>
+                        <span>Your ad will be reviewed and activated after payment verification</span>
+                      </li>
                     </ul>
                   </div>
 
-                  <Button type="submit" className="w-full" disabled={adSubmitting}>
+                  <Button type="submit" className="w-full h-12 text-base font-bold" disabled={adSubmitting}>
                     {adSubmitting ? "Submitting..." : "Submit Advertisement"}
                   </Button>
 
                   <div className="text-center pt-2">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-gray-600">
                       Already submitted an ad?{" "}
-                      <Link href="/public/check-ad" className="text-primary hover:underline font-medium">
+                      <Link href="/public/check-ad" className="text-amber-600 hover:text-amber-700 hover:underline font-semibold">
                         Check your ad status
                       </Link>
                     </p>
