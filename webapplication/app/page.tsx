@@ -386,124 +386,124 @@ export default function Home() {
             {/* Auto-scrolling container */}
             <div className="flex gap-6 animate-scroll-left">
               {/* First set of cards */}
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Shield className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Shield className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Manual Verification</h3>
-                  <p className="text-sm text-gray-600">Every guide is screened before approval.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Manual Verification</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Every guide is screened before approval.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Zap className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Zap className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Direct Connection</h3>
-                  <p className="text-sm text-gray-600">No middlemen agencies, just you and the guide.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Direct Connection</h3>
+                  <p className="text-xs md:text-sm text-gray-600">No middlemen agencies, just you and the guide.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Globe className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Globe className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Local Secrets</h3>
-                  <p className="text-sm text-gray-600">Access places only locals know about.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Local Secrets</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Access places only locals know about.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Smartphone className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Smartphone className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Mobile First</h3>
-                  <p className="text-sm text-gray-600">Seamless experience on any device.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Mobile First</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Seamless experience on any device.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Clock className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Clock className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Real-Time Updates</h3>
-                  <p className="text-sm text-gray-600">Instant notifications and booking confirmations.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Real-Time Updates</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Instant notifications and booking confirmations.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Award className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Award className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Quality Assured</h3>
-                  <p className="text-sm text-gray-600">Rated guides with verified reviews.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Quality Assured</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Rated guides with verified reviews.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Heart className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Heart className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Community Driven</h3>
-                  <p className="text-sm text-gray-600">Built by travelers for travelers.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Community Driven</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Built by travelers for travelers.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Shield className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Shield className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Beta Support</h3>
-                  <p className="text-sm text-gray-600">24/7 support team available during beta.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Beta Support</h3>
+                  <p className="text-xs md:text-sm text-gray-600">24/7 support team available during beta.</p>
                 </CardContent>
               </Card>
 
               {/* Duplicate set for seamless loop */}
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Shield className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Shield className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Manual Verification</h3>
-                  <p className="text-sm text-gray-600">Every guide is screened before approval.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Manual Verification</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Every guide is screened before approval.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Zap className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Zap className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Direct Connection</h3>
-                  <p className="text-sm text-gray-600">No middlemen agencies, just you and the guide.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Direct Connection</h3>
+                  <p className="text-xs md:text-sm text-gray-600">No middlemen agencies, just you and the guide.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Globe className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Globe className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Local Secrets</h3>
-                  <p className="text-sm text-gray-600">Access places only locals know about.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Local Secrets</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Access places only locals know about.</p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[280px] flex-shrink-0">
-                <CardContent className="pt-6 pb-6 text-center">
-                  <div className="h-16 w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-4 group-hover:bg-amber-200 transition-all">
-                    <Smartphone className="h-8 w-8 text-amber-600" />
+              <Card className="bg-white border-2 border-gray-100 shadow-lg hover:shadow-xl transition-all hover:scale-105 group min-w-[200px] md:min-w-[280px] flex-shrink-0">
+                <CardContent className="pt-4 pb-4 md:pt-6 md:pb-6 text-center">
+                  <div className="h-12 w-12 md:h-16 md:w-16 rounded-xl bg-amber-100 flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-amber-200 transition-all">
+                    <Smartphone className="h-6 w-6 md:h-8 md:w-8 text-amber-600" />
                   </div>
-                  <h3 className="font-bold text-lg mb-2 uppercase tracking-wide">Mobile First</h3>
-                  <p className="text-sm text-gray-600">Seamless experience on any device.</p>
+                  <h3 className="font-bold text-sm md:text-lg mb-1 md:mb-2 uppercase tracking-wide">Mobile First</h3>
+                  <p className="text-xs md:text-sm text-gray-600">Seamless experience on any device.</p>
                 </CardContent>
               </Card>
             </div>
@@ -543,10 +543,10 @@ export default function Home() {
 
           {!adSuccess ? (
             <Card className="bg-white/95 backdrop-blur-md border-2 border-gray-100 shadow-2xl">
-              <CardHeader className="pb-6 pt-6 px-6 md:px-12 text-center">
+              <CardHeader className="pb-6 pt-6 px-12 text-center">
                 <CardTitle className="text-2xl font-bold tracking-tight">Submit Your Advertisement</CardTitle>
               </CardHeader>
-              <CardContent className="px-6 md:px-12 pb-8">
+              <CardContent className="px-12 pb-8">
                 <form onSubmit={handleAdSubmit} className="space-y-5">
                   <div>
                     <Label htmlFor="imageUrl" className="text-base font-semibold">Image URL *</Label>
