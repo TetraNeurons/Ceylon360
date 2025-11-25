@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,

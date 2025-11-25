@@ -44,3 +44,5 @@ next-env.d.ts
 
 .kiro
 .vscode
+
+firebase_config.json

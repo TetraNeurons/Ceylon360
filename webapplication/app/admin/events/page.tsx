@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
 import { AppSidebar } from "@/components/admin/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -173,7 +174,15 @@ export default function AdminEventsPage() {
                       
                       <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 mb-4 font-poppins">
                         <p className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4" /> {event.date}
+                          <Calendar className="w-4 h-4" /> 
+                          {event.date ? (() => {
+                            try {
+                              const date = new Date(event.date);
+                              return format(date, "PPP 'at' p");
+                            } catch {
+                              return event.date;
+                            }
+                          })() : 'No date'}
                         </p>
                         <p className="flex items-center gap-2">
                           <MapPin className="w-4 h-4" /> {event.place}
