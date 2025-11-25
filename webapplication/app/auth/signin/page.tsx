@@ -71,8 +71,8 @@ export default function SignInPage() {
           <div className="flex h-20 items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 backdrop-blur-sm text-white border border-white/20">
-                <span className="text-xl font-bold font-poppins">H</span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg overflow-hidden" style={{ filter: 'drop-shadow(0 0 8px rgba(245, 245, 245, 0.8))' }}>
+                <img src="/images/logo_whitebg.png" alt="Heritage Lanka Logo" className="h-full w-full object-contain" />
               </div>
               <span className="text-2xl font-bold tracking-tight text-white font-dancing-script">
                 Heritage <span className="ml-2">Lanka</span>

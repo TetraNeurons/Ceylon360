@@ -6,9 +6,18 @@ export default function Footer() {
   return (
     <footer className="border-t border-border/40 bg-muted/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Logo and Brand */}
+        <div className="flex items-center space-x-3 mb-8">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg overflow-hidden" style={{ filter: 'drop-shadow(0 0 6px rgba(100, 100, 100, 0.4))' }}>
+            <img src="/images/logo.png" alt="Heritage Lanka Logo" className="h-full w-full object-contain" />
+          </div>
+          <span className="text-2xl font-bold tracking-tight font-dancing-script">
+            Heritage <span className="ml-2">Lanka</span>
+          </span>
+        </div>
 
         {/* Bottom */}
-        <div className="border-t border-border/40">
+        <div className="border-t border-border/40 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-muted-foreground">
               © {currentYear} Heritage Lanka. All rights reserved.
