@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Loader2, CloudRain, Calendar, MapPin,  Phone,  Sun, Cloud, CloudLightning, Newspaper, ArrowRight,  AlertTriangle, Ambulance, Shield, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -430,7 +430,10 @@ export default function DashboardPage() {
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
-                          <DialogHeader><DialogTitle className="font-poppins">Select Date</DialogTitle></DialogHeader>
+                          <DialogHeader>
+                            <DialogTitle className="font-poppins">Select Date</DialogTitle>
+                            <DialogDescription className="sr-only">Choose a date from the calendar</DialogDescription>
+                          </DialogHeader>
                           <CalendarComponent
                             mode="single"
                             selected={selectedDate}
@@ -457,7 +460,10 @@ export default function DashboardPage() {
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-3xl">
-                          <DialogHeader><DialogTitle className="font-poppins">Your Location</DialogTitle></DialogHeader>
+                          <DialogHeader>
+                            <DialogTitle className="font-poppins">Your Location</DialogTitle>
+                            <DialogDescription className="sr-only">View your current location on an interactive map</DialogDescription>
+                          </DialogHeader>
                           <div className="h-[300px] sm:h-[400px] rounded-lg overflow-hidden">
                             <MapContainer
                               center={[coordinates.lat, coordinates.lon]}

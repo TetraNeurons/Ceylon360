@@ -7,6 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -383,6 +384,9 @@ export default function PlacesPage() {
                         <DialogTitle className="text-xl lg:text-2xl font-bold pr-8 font-poppins text-gray-900">
                           {place.title}
                         </DialogTitle>
+                        <DialogDescription className="sr-only">
+                          Place details including images, description, location, and contact information
+                        </DialogDescription>
                       </DialogHeader>
 
                       {/* Image Carousel */}

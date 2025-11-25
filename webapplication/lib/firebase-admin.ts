@@ -1,14 +1,12 @@
 import * as admin from 'firebase-admin';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 let firebaseApp: admin.app.App | null = null;
 
 /**
- * Initialize Firebase Admin SDK with service account credentials
+ * Initialize Firebase Admin SDK with service account credentials from environment variables
  * Uses singleton pattern to ensure only one instance is created
  * @returns Firebase Admin App instance
- * @throws Error if service account file is missing or invalid
+ * @throws Error if required environment variables are missing or invalid
  */
 export function initializeFirebaseAdmin(): admin.app.App {
   // Return existing instance if already initialized
@@ -17,32 +15,32 @@ export function initializeFirebaseAdmin(): admin.app.App {
   }
 
   try {
-    // Load service account from firebase_config.json
-    const serviceAccountPath = join(process.cwd(), 'firebase_config.json');
-    const serviceAccountFile = readFileSync(serviceAccountPath, 'utf8');
-    const serviceAccount = JSON.parse(serviceAccountFile);
+    // Validate required environment variables
+    const projectId = process.env.FIREBASE_PROJECT_ID;
+    const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY;
+    const storageBucket = process.env.FIREBASE_STORAGE_BUCKET;
 
-    // Initialize Firebase Admin SDK
+    if (!projectId || !clientEmail || !privateKey || !storageBucket) {
+      throw new Error(
+        'Missing required Firebase environment variables. Please ensure FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, and FIREBASE_STORAGE_BUCKET are set in .env file.'
+      );
+    }
+
+    // Initialize Firebase Admin SDK with environment variables
     firebaseApp = admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      storageBucket: 'tourguide-17ed2.firebasestorage.app'
+      credential: admin.credential.cert({
+        projectId,
+        clientEmail,
+        // Replace escaped newlines with actual newlines
+        privateKey: privateKey.replace(/\\n/g, '\n'),
+      }),
+      storageBucket,
     });
 
     console.log('Firebase Admin SDK initialized successfully');
     return firebaseApp;
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      throw new Error(
-        'Firebase service account file not found. Please ensure firebase_config.json exists in the project root.'
-      );
-    }
-    
-    if (error instanceof SyntaxError) {
-      throw new Error(
-        'Invalid firebase_config.json file. Please ensure it contains valid JSON.'
-      );
-    }
-
     throw new Error(
       `Failed to initialize Firebase Admin SDK: ${(error as Error).message}`
     );

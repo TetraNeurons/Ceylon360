@@ -41,6 +41,7 @@ import { usePathname } from "next/navigation";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger
@@ -129,6 +130,9 @@ export function AppSidebar() {
                 <DialogTitle className="text-xl font-semibold">
                   Emergency Services
                 </DialogTitle>
+                <DialogDescription className="sr-only">
+                  Emergency contact numbers for tourists in Sri Lanka
+                </DialogDescription>
               </DialogHeader>
 
               <div className="space-y-4 mt-4">
@@ -348,6 +352,9 @@ export function AppSidebar() {
                     <DialogTitle className="text-lg font-semibold">
                       Emergency Services
                     </DialogTitle>
+                    <DialogDescription className="sr-only">
+                      Emergency contact numbers for tourists in Sri Lanka
+                    </DialogDescription>
                   </DialogHeader>
 
                   <div className="space-y-3 mt-3">

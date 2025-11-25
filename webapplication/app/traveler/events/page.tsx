@@ -192,6 +192,9 @@ export default function EventsPage() {
                         <DialogTitle className="text-xl lg:text-2xl font-bold pr-8 font-poppins text-gray-900">
                           {event.title}
                         </DialogTitle>
+                        <DialogDescription className="sr-only">
+                          Event details including images, description, location, and contact information
+                        </DialogDescription>
                       </DialogHeader>
 
                       {/* Image Carousel */}
