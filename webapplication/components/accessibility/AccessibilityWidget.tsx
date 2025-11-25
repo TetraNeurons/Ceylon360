@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Volume2, Type, Eye, X, GripVertical } from 'lucide-react';
+import { Volume2, Type, Eye, X, GripVertical, Accessibility } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import {
@@ -208,12 +208,12 @@ export function AccessibilityWidget() {
           <Button
             onClick={handleClick}
             onMouseDown={handleMouseDown}
-            className="rounded-full w-12 h-12 shadow-lg cursor-move relative"
+            className="rounded-full w-12 h-12 shadow-lg cursor-move relative bg-blue-400 hover:bg-blue-500 text-white"
             aria-label="Open accessibility options"
             title="Accessibility Options (Drag to move)"
           >
             <GripVertical className="w-3 h-3 absolute top-1 left-1 opacity-40" />
-            <Eye className="w-5 h-5" />
+            <Accessibility className="w-5 h-5" />
           </Button>
         ) : (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-4 w-80 border border-gray-200 dark:border-gray-700">
