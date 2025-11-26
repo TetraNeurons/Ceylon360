@@ -44,7 +44,7 @@ const response = await axiosInstance.get('/api/auth/validate')
       case 'ADMIN':
         return '/admin/dashboard'
       case 'GUIDE':
-        return '/guide/dashboard'
+        return '/guider/dashboard'
       case 'TRAVELER':
       default:
         return '/traveler/dashboard'
