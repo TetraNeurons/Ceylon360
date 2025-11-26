@@ -2,10 +2,14 @@ const general = require('./general');
 const group = require('./group');
 const media = require('./media');
 const misc = require('./misc');
+const chat = require('./chat');
+const interaction = require('./interaction');
 
 module.exports = {
     ...general,
     ...group,
     ...media,
-    ...misc
+    ...misc,
+    ...chat,
+    ...interaction
 };

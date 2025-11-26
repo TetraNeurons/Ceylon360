@@ -145,6 +145,32 @@ module.exports = {
         } else {
             await msg.reply('This command can only be used in a group!');
         }
+    },
+    restrict: async (msg) => {
+        const chat = await msg.getChat();
+        if (chat.isGroup) {
+            try {
+                await chat.setInfoAdminsOnly(true);
+                await msg.reply('Group info is now restricted to admins only.');
+            } catch (e) {
+                await msg.reply('Failed to restrict group info. Bot might not be admin.');
+            }
+        } else {
+            await msg.reply('This command can only be used in a group!');
+        }
+    },
+    announcement: async (msg) => {
+        const chat = await msg.getChat();
+        if (chat.isGroup) {
+            try {
+                await chat.setMessagesAdminsOnly(true);
+                await msg.reply('Group is now closed for participants (Admins only).');
+            } catch (e) {
+                await msg.reply('Failed to change group settings. Bot might not be admin.');
+            }
+        } else {
+            await msg.reply('This command can only be used in a group!');
+        }
     }
 };
 
