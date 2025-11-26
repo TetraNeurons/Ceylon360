@@ -119,11 +119,27 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const res = await fetch("https://api.frankfurter.app/latest?from=USD");
+        // Using ExchangeRate-API which supports LKR with accurate rates
+        const res = await fetch("https://open.er-api.com/v6/latest/USD");
         const data = await res.json();
-        setRates({ USD: 1, ...data.rates, LKR: data.rates.LKR || 302.05 });
-      } catch {
-        setRates({ USD: 1, LKR: 302.05, EUR: 0.92 });
+        
+        if (data.result === "success" && data.rates) {
+          setRates({ USD: 1, ...data.rates });
+        } else {
+          throw new Error("Invalid API response");
+        }
+      } catch (error) {
+        console.error("Failed to fetch currency rates:", error);
+        // Fallback rates (approximate values as of late 2024)
+        setRates({ 
+          USD: 1, 
+          LKR: 305, 
+          EUR: 0.92, 
+          GBP: 0.79, 
+          JPY: 149, 
+          AUD: 1.52, 
+          INR: 83 
+        });
       }
     };
     fetchRates();
@@ -253,7 +269,7 @@ export default function DashboardPage() {
                             {convertedAmount || "0.00"} {toCurrency}
                           </h2>
                         </div>
-                        <p className="text-xs text-gray-500 mt-2 sm:mt-3 font-medium text-center sm:text-left">Live rates via Frankfurter API</p>
+                        <p className="text-xs text-gray-500 mt-2 sm:mt-3 font-medium text-center sm:text-left">Live rates via ExchangeRate-API</p>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-5">
